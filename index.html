@@ -337,7 +337,9 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 .t-ses .two span:first-child{flex:0 0 82mm}
 .t-ses .grp{display:flex;flex-direction:column;gap:3.5mm}
 .t-ses .cen{text-align:center;padding:0 0 8mm}
-.t-ses .v{font-family:Arial,Helvetica,sans-serif;font-size:11pt}
+.t-ses .v{font-family:Arial,Helvetica,sans-serif;font-size:10.5pt}
+.t-ses .cx{display:inline-block;width:3.4mm;text-align:center;font-weight:700}
+.t-ses .bd{gap:6mm}
 
 @media print{
   @page{size:A4;margin:0}
@@ -830,7 +832,19 @@ const DOCS = [
   },
   {
     id:'enoxa', grupo:'Encaminhamentos', tpl:'sesdf', full:true,
-    label:'Enoxaparina — formulário SES-DF', nota:'Formulário da Secretaria, em branco para preencher à mão'
+    label:'Enoxaparina — formulário SES-DF', nota:'Formulário da Secretaria — digitado ou em branco',
+    campos:[
+      {key:'branco',tipo:'switch',label:'Imprimir em branco, para preencher à mão'},
+      {key:'esp',tipo:'text',label:'Especialidade',padrao:'Ginecologia e Obstetrícia'},
+      {key:'ses',tipo:'text',label:'Número SES',ph:'número do cartão SES'},
+      {key:'fone',tipo:'text',label:'Fone da paciente',ph:'(61) 9....-....'},
+      {key:'cid',tipo:'text',label:'CID da doença',ph:'O22.3'},
+      {key:'medic',tipo:'text',label:'Medicamento',ph:'Enoxaparina sódica 40 mg/0,4 mL'},
+      {key:'poso',tipo:'text',label:'Posologia',ph:'01 aplicação subcutânea ao dia'},
+      {key:'dur',tipo:'text',label:'Duração do tratamento',ph:'42 dias'},
+      {key:'crit',tipo:'textarea',label:'Critérios para escolha do medicamento',ph:'Tromboprofilaxia puerperal…'},
+      {key:'gest',tipo:'select',label:'Gestante',opcoes:['NÃO','SIM','deixar em branco']}
+    ]
   },
   {
     id:'laqueadura', grupo:'Encaminhamentos', tpl:'laq', full:true, paginas:2,
@@ -994,30 +1008,37 @@ function tplMrpa(){
     + '</div>';
 }
 
-function tplSesdf(){
+function tplSesdf(d, v){
+  v = v || {};
+  const b = !!v.branco;
+  const val = k => b ? '' : (v[k] || '');
+  const campo = (lbl, valor) => '<p class="f">' + lbl + ' <span class="v">' + esc(valor || '') + '</span></p>';
+  const g = b ? '' : (v.gest === undefined ? 'NÃO' : v.gest);
+  const cx = m => '(<span class="cx">' + (m ? 'X' : '&nbsp;') + '</span>)';
+  const esp = b ? '' : (v.esp === undefined ? 'Ginecologia e Obstetrícia' : v.esp);
   return '<div class="t-ses">'
     + '<div class="hd"><img src="' + LOGO_SES + '" alt="">'
       + '<div class="tt"><i>SECRETARIA DE ESTADO DE SAÚDE DO DISTRITO FEDERAL</i>'
       + '<i>Subsecretaria de Atenção Integral à Saúde</i>'
       + '<i>Diretoria de Assistência Farmacêutica</i></div></div>'
     + '<p class="ttl">FARMÁCIA AMBULATORIAL DA ATENÇÃO SECUNDÁRIA<br>FORMULÁRIO DE DISPENSAÇÃO MEDICAMENTOS</p>'
-    + '<p class="f esp">Especialidade:</p>'
+    + '<p class="f esp">Especialidade: <span class="v">' + esc(esp) + '</span></p>'
     + '<hr>'
     + '<div class="bd">'
-      + '<p class="f">Nome do paciente: <span class="v">' + esc(state.nome) + '</span></p>'
-      + '<p class="f fone">Fone:</p>'
-      + '<p class="f">Número SES:</p>'
-      + '<p class="f">CID da doença:</p>'
-      + '<p class="f">Medicamento:</p>'
-      + '<p class="f">Posologia:</p>'
-      + '<p class="f">Duração do tratamento:</p>'
-      + '<p class="f">Critérios para escolha do medicamento:</p>'
-      + '<div class="grp" style="margin-top:5mm">'
-        + '<p class="f">Gestante: &nbsp;(&nbsp;&nbsp;) SIM &nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;) NÃO</p>'
+      + campo('Nome do paciente:', b ? '' : state.nome)
+      + '<p class="f fone">Fone: <span class="v">' + esc(val('fone')) + '</span></p>'
+      + campo('Número SES:', val('ses'))
+      + campo('CID da doença:', val('cid'))
+      + campo('Medicamento:', val('medic'))
+      + campo('Posologia:', val('poso'))
+      + campo('Duração do tratamento:', val('dur'))
+      + campo('Critérios para escolha do medicamento:', val('crit'))
+      + '<div class="grp" style="margin-top:3mm">'
+        + '<p class="f">Gestante: &nbsp;' + cx(g === 'SIM') + ' SIM &nbsp;&nbsp;&nbsp;' + cx(g === 'NÃO') + ' NÃO</p>'
         + '<p class="f">Semanas de Gestação: ____________ em: ____/____/____</p>'
         + '<p class="f">Data Provável do Parto: ____/____/____</p>'
       + '</div>'
-      + '<p class="f two" style="margin-top:5mm"><span>Médico(a):</span><span>Data: <span class="v">' + esc(br(state.data)) + '</span></span></p>'
+      + '<p class="f two" style="margin-top:3mm"><span>Médico(a):</span><span>Data: <span class="v">' + esc(b ? '' : br(state.data)) + '</span></span></p>'
     + '</div>'
     + '<p class="cen">Nome e carimbo c/ CRM</p>'
     + '</div>';
