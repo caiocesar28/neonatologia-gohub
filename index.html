@@ -666,15 +666,22 @@ const DOCS = [
   /* ---------- receitas ---------- */
   {
     id:'rx_pn', grupo:'Receitas', tpl:'rec',
-    label:'Receita — parto normal', nota:'Sulfato ferroso, paracetamol e escopolamina (2026)',
-    campos:[{key:'en',tipo:'switch',label:'Incluir tradução em inglês'}],
+    label:'Receita — parto normal', nota:'Sulfato ferroso, dipirona e escopolamina (2026)',
+    campos:[
+      {key:'alergia',tipo:'switch',label:'Alergia à dipirona (troca por paracetamol 750 mg)'},
+      {key:'en',tipo:'switch',label:'Incluir tradução em inglês'}
+    ],
     body(v){ return '<p class="d-sub">Uso oral</p>' + rx([
       {n:1,nome:'Sulfato ferroso 40 mg',qtd:'180 comprimidos',
        pos:'Tomar 1 comprimido às 10h e 1 comprimido às 16h durante 90 dias.',
        en: v.en ? 'Post-pregnancy iron supplementation: take 1 pill at 10am and 1 pill at 4pm during 90 days.' : ''},
-      {n:2,nome:'Paracetamol 750 mg',qtd:'40 comprimidos',
-       pos:'Tomar 1 comprimido de 6 em 6 horas em caso de dor.',
-       en: v.en ? 'Pain control medication: take 1 pill every 6 hours, if pain.' : ''},
+      v.alergia
+        ? {n:2,nome:'Paracetamol 750 mg',qtd:'40 comprimidos',
+           pos:'Tomar 1 comprimido de 6 em 6 horas em caso de dor ou febre.',
+           en: v.en ? 'Pain control medication: take 1 pill every 6 hours, if pain or fever.' : ''}
+        : {n:2,nome:'Dipirona 500 mg',qtd:'40 comprimidos',
+           pos:'Tomar 2 comprimidos de 6 em 6 horas em caso de dor.',
+           en: v.en ? 'Pain control medication: take 2 pills every 6 hours, if pain.' : ''},
       {n:3,nome:'Escopolamina 10 mg',qtd:'15 comprimidos',
        pos:'Tomar 1 comprimido de 8 em 8 horas por até 5 dias, se cólica.',
        en: v.en ? 'Intestinal discomfort or colics: take 1 pill every 8 hours, if intestinal colic.' : ''}
@@ -832,19 +839,55 @@ const DOCS = [
   },
   {
     id:'enoxa', grupo:'Encaminhamentos', tpl:'sesdf', full:true,
-    label:'Enoxaparina — formulário SES-DF', nota:'Formulário da Secretaria — digitado ou em branco',
+    label:'Enoxaparina — formulário SES-DF', nota:'Formulário da Secretaria — digitado ou em branco. Gera receita e guia de retirada automaticamente.',
     campos:[
       {key:'branco',tipo:'switch',label:'Imprimir em branco, para preencher à mão'},
       {key:'esp',tipo:'text',label:'Especialidade',padrao:'Ginecologia e Obstetrícia'},
       {key:'ses',tipo:'text',label:'Número SES',ph:'número do cartão SES'},
       {key:'fone',tipo:'text',label:'Fone da paciente',ph:'(61) 9....-....'},
       {key:'cid',tipo:'text',label:'CID da doença',ph:'O22.3'},
-      {key:'medic',tipo:'text',label:'Medicamento',ph:'Enoxaparina sódica 40 mg/0,4 mL'},
-      {key:'poso',tipo:'text',label:'Posologia',ph:'01 aplicação subcutânea ao dia'},
-      {key:'dur',tipo:'text',label:'Duração do tratamento',ph:'42 dias'},
+      {key:'dose',tipo:'select',label:'Dose da enoxaparina',opcoes:['40 mg','60 mg','80 mg'],padrao:'40 mg'},
+      {key:'ampolas',tipo:'number',label:'Quantidade',padrao:'10',sufixo:'ampolas'},
+      {key:'dias',tipo:'number',label:'Duração do tratamento',padrao:'10',sufixo:'dias'},
+      {key:'medic',tipo:'text',label:'Medicamento (formulário SES)',ph:'Enoxaparina sódica 40 mg/0,4 mL'},
+      {key:'poso',tipo:'text',label:'Posologia (formulário SES)',ph:'01 aplicação subcutânea ao dia'},
       {key:'crit',tipo:'textarea',label:'Critérios para escolha do medicamento',ph:'Tromboprofilaxia puerperal…'},
       {key:'gest',tipo:'select',label:'Gestante',opcoes:['NÃO','SIM','deixar em branco']}
     ]
+  },
+  {
+    id:'rx_enoxa', grupo:'Receitas', tpl:'rec',
+    label:'Receita — Enoxaparina', nota:'Gerada automaticamente ao marcar o formulário SES-DF',
+    body(){
+      const e = state.vals.enoxa || {};
+      const dose = e.dose || '40 mg', qtd = e.ampolas || '10', dias = e.dias || '10';
+      return '<p class="d-sub">Uso subcutâneo</p>' + rx([
+        {n:1, nome:'Enoxaparina ' + dose, qtd: qtd + ' ampolas',
+         pos:'Aplicar 1 ampola por via subcutânea, 1 vez ao dia, por ' + dias + ' dias.'}
+      ]);
+    }
+  },
+  {
+    id:'enoxa_onde', grupo:'Orientações à paciente', tpl:'band', semAssinatura:true,
+    label:'Onde retirar a Enoxaparina (SES-DF)', nota:'Gerada automaticamente ao marcar o formulário SES-DF',
+    titulo:'Onde retirar a Enoxaparina — rede SES-DF',
+    body(){
+      return '<p class="d-sub">Documentos necessários</p><ul>'
+        + '<li>Documento de identificação</li>'
+        + '<li>Cartão SES</li>'
+        + '<li>Prescrição médica em 2 (duas) vias — original e cópia (anexa)</li>'
+        + '<li>Formulário de Dispensação da Farmácia Ambulatorial (formulário SES-DF anexo)</li>'
+        + '</ul>'
+        + '<p class="d-sub" style="margin-top:2mm">Onde retirar o medicamento</p><ul>'
+        + '<li>Policlínica de Planaltina</li>'
+        + '<li>Farmácia Ambulatorial do Hospital de Base</li>'
+        + '<li>Policlínica de Taguatinga</li>'
+        + '<li>Centro Especializado de Saúde da Mulher (CESMU)</li>'
+        + '<li>Componente Especializado da Assistência Farmacêutica — CEAF ("Farmácia de Alto Custo"), apenas para CID O22.3, mediante encaminhamento prévio. Se o CEAF não liberar, solicitar o "recibo de indeferimento" e levá-lo às demais unidades.</li>'
+        + '</ul>'
+        + '<p class="small" style="margin-top:2mm">CIDs atendidos: O22.3; I26 e subtipos; I74 e subtipos; I80 e subtipos.<br>'
+        + 'Fonte: Secretaria de Saúde do DF — saude.df.gov.br/enoxaparinas-heparinas-de-baixo-peso-molecular</p>';
+    }
   },
   {
     id:'laqueadura', grupo:'Encaminhamentos', tpl:'laq', full:true, paginas:2,
@@ -1167,6 +1210,7 @@ listEl.addEventListener('change', e => {
     listEl.querySelector('[data-doc="' + id + '"].doc').classList.toggle('on', t.checked);
     const f = listEl.querySelector('[data-fields="' + id + '"]');
     if(f) f.classList.toggle('hide', !t.checked);
+    if(id === 'enoxa'){ manage('rx_enoxa', t.checked); manage('enoxa_onde', t.checked); }
   } else if(t.dataset.key) setField(t);
   render();
 });
