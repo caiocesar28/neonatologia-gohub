@@ -56,8 +56,12 @@ body{margin:0;background:var(--paper);color:var(--ink);
 
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow)}
 .rail{position:sticky;top:20px;max-height:calc(100vh - 40px);display:flex;flex-direction:column}
-#list{overflow-y:auto;min-height:0;flex:1}
-@media (max-width:1000px){.rail{position:static;max-height:none;display:block}#list{overflow:visible}}
+.railscroll{overflow-y:auto;min-height:0;flex:1}
+@media (max-width:1000px){.rail{position:static;max-height:none;display:block}.railscroll{overflow:visible;max-height:none}}
+.listnote{font-size:12px;color:var(--ink-3);line-height:1.4;margin:0 0 12px}
+.jump{display:block;width:100%;text-align:left;font:inherit;font-size:12.5px;font-weight:500;margin-top:18px;
+  padding:9px 12px;border-radius:8px;cursor:pointer;background:var(--surface-2);color:var(--ink-2);border:1px dashed var(--line-2)}
+.jump:hover{color:var(--ink);border-color:var(--ink-3)}
 .panel-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .panel-head h2{margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .panel-body{padding:16px}
@@ -363,6 +367,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
   <div class="layout">
     <aside>
       <div class="panel rail">
+        <div class="railscroll">
         <div class="panel-head"><h2>Paciente</h2></div>
         <div class="panel-body">
           <div class="field">
@@ -432,10 +437,16 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
             <div class="qlabel">Kit base <em>sempre vai na alta</em></div>
             <div class="tags" id="q-base"></div>
           </div>
+
+          <button type="button" class="jump" id="jump">↓ Todos os papéis do HUB — enoxaparina, parecer, atestado, β-hCG, laqueadura, receituário em branco…</button>
         </div>
 
-        <div class="panel-head" style="border-top:1px solid var(--line)"><h2>Todos os papéis</h2><span class="count" id="count">nenhum</span></div>
-        <div class="panel-body" id="list"></div>
+        <div class="panel-head" style="border-top:1px solid var(--line)" id="allhead"><h2>Todos os papéis</h2><span class="count" id="count">nenhum</span></div>
+        <div class="panel-body">
+          <p class="listnote">Tudo o que o painel acima monta aparece marcado aqui. Para um caso fora da rotina, marque ou desmarque à mão — os formulários do HUB saem em branco para preencher.</p>
+          <div id="list"></div>
+        </div>
+        </div>
 
         <div class="actions">
           <button class="btn" id="print">Imprimir</button>
@@ -1227,6 +1238,11 @@ document.querySelector('.panel-body').addEventListener('click', e => {
   else if(b.dataset.base) state.base.has(b.dataset.base) ? state.base.delete(b.dataset.base) : state.base.add(b.dataset.base);
   else return;
   applyQuick();
+});
+$('#jump').addEventListener('click', () => {
+  const box = document.querySelector('.railscroll'), head = $('#allhead');
+  if(box && head && box.clientHeight < box.scrollHeight) box.scrollTo({top: head.offsetTop - box.offsetTop, behavior:'smooth'});
+  else head.scrollIntoView({behavior:'smooth', block:'start'});
 });
 $('#alergia').addEventListener('change', e => { state.alergia = e.target.checked; applyQuick(); });
 $('#ubs').addEventListener('input', e => { state.vals.ret_baixo.ubs = e.target.value; render(); });
