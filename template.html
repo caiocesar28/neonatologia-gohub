@@ -365,16 +365,6 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
               <input type="text" id="leito" placeholder="ex.: 04 / Neo">
             </div>
           </div>
-          <div class="row3">
-            <div class="field">
-              <label for="peso">Peso na alta <span class="opt">(g)</span></label>
-              <input type="text" id="peso" placeholder="ex.: 3.120 g">
-            </div>
-            <div class="field">
-              <label for="ig">Idade Gestacional</label>
-              <input type="text" id="ig" placeholder="ex.: 39s 2d">
-            </div>
-          </div>
 
           <!-- Controles rápidos da neonatologia -->
           <div class="qgroup">
@@ -875,7 +865,7 @@ const DOCS = [
 
 /* ======================= ESTADO ======================= */
 const state = {
-  nome:'', reg:'', data:'', dn:'', leito:'', peso:'', ig:'',
+  nome:'', reg:'', data:'', dn:'', leito:'',
   alim:'ame', retorno:'baixo', retornos:new Set(['baixo']),
   sel:new Set(), vals:{},
   partic:[], base:new Set(['orientacoes','ps','triagens','vacinas','rx_vitd','leite']), autoOn:new Set()
@@ -892,7 +882,6 @@ const listEl = $('#list'), stage = $('#stage');
 /* ======================= TEMPLATES ======================= */
 function idLine(){
   let extra = [];
-  if(state.peso) extra.push('<b>PESO:</b> ' + esc(state.peso));
   if(state.leito) extra.push('<b>LEITO:</b> ' + esc(state.leito));
   const ex = extra.length ? ' &middot; ' + extra.join(' &middot; ') : '';
   return '<div class="d-id"><span class="nm"><b>RN:</b> ' + esc(state.nome || '____________________') + '</span>'
@@ -1126,7 +1115,7 @@ listEl.addEventListener('input', e => {
   }
 });
 
-['nome','reg','data','dn','leito','peso','ig'].forEach(k => {
+['nome','reg','data','dn','leito'].forEach(k => {
   const el = $('#' + k);
   if(el) el.addEventListener('input', e => { state[k] = e.target.value; render(); });
 });
