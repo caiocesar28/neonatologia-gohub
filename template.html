@@ -329,7 +329,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
   <header class="masthead">
     <div>
       <div class="eyebrow">HUB-UnB / EBSERH &middot; Unidade Neonatal</div>
-      <h1>Alta da Neonatologia</h1>
+      <h1>🐳 Alta da Neonatologia</h1>
       <p>Preencha os dados do recém-nascido, marque os papéis e imprima. Cada documento sai no seu formulário oficial do HUB — dois por folha A4 com linha de corte.</p>
     </div>
     <button class="chip ghost" id="theme">Alternar tema</button>
@@ -380,16 +380,16 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
           <div class="qgroup">
             <div class="qlabel">Alimentação na alta</div>
             <div class="seg" id="q-alim">
-              <button type="button" data-alim="ame" class="on">AME (Peito exclusivo)</button>
+              <button type="button" data-alim="ame" class="on">AME (Aleitamento materno exclusivo)</button>
               <button type="button" data-alim="formula">Fórmula / Misto</button>
             </div>
           </div>
 
           <div class="qgroup">
-            <div class="qlabel">Retorno prioritário</div>
-            <div class="seg" id="q-ret">
+            <div class="qlabel">Retorno prioritário <em>(pode marcar mais de um)</em></div>
+            <div class="tags" id="q-ret">
               <button type="button" data-ret="baixo" class="on">UBS (7-10d)</button>
-              <button type="button" data-ret="ped48">Pediatria 48h</button>
+              <button type="button" data-ret="ped48">Alcon</button>
               <button type="button" data-ret="cd">C&amp;D (HUB)</button>
             </div>
           </div>
@@ -441,6 +441,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.4 8.9-8 10-4.6-1.1-8-5-8-10V6l8-4z"/></svg>
         Os dados não são enviados a nenhum servidor. Funcionamento 100% no seu navegador.
       </p>
+      <p class="privacy" style="margin-top:4px;opacity:.6">Feito por Caio César, Letícia Brandão e Malu &middot; Turma 114</p>
     </aside>
 
     <main>
@@ -563,8 +564,9 @@ const PARTIC = {
 
 const BASE = [
   ['orientacoes','Orientações do RN'],
-  ['ps','Sinais de alarme (PS)'],
-  ['triagens','Triagens e vacinas'],
+  ['ps','Sinais de alarme'],
+  ['triagens','Triagens neonatais'],
+  ['vacinas','Calendário vacinal'],
   ['rx_vitd','Vitamina D 200 UI'],
   ['leite','Banco de leite']
 ];
@@ -578,7 +580,7 @@ const DOCS = [
     campos:[
       {key:'dose',tipo:'select',label:'Apresentação',opcoes:['Vitamina D (Colecalciferol) 200 UI/gota','Vitamina D 500 UI/gota'],padrao:'Vitamina D (Colecalciferol) 200 UI/gota'},
       {key:'gotas',tipo:'number',label:'Posologia (gotas por dia)',padrao:2,sufixo:'gotas/dia'},
-      {key:'obs',tipo:'text',label:'Observação',padrao:'Iniciar a partir do 7º dia de vida. Pingar 2 gotas por via oral, 1 vez ao dia (pela manhã).'}
+      {key:'obs',tipo:'text',label:'Observação',padrao:'Iniciar a partir do 7º dia de vida. Ofertar 2 gotas por via oral, 1 vez ao dia (pela manhã).'}
     ],
     body(v){
       const dose = v.dose || 'Vitamina D (Colecalciferol) 200 UI/gota';
@@ -588,7 +590,7 @@ const DOCS = [
           n: 1,
           nome: dose,
           qtd: '01 frasco',
-          pos: 'Pingar ' + g + ' gotas por via oral, 1 vez ao dia (pela manhã).',
+          pos: 'Ofertar ' + g + ' gotas por via oral, 1 vez ao dia (pela manhã).',
           obs: v.obs || 'Uso contínuo para prevenção de raquitismo e suplementação profilática da infância.'
         }
       ]);
@@ -632,6 +634,7 @@ const DOCS = [
     label:'Requisição de exames — HUB', nota:'Modelo oficial do HUB (papelada-HUB) — USG quadril, USTF, bilirrubinas e outros',
     campos:[
       {key:'itens',tipo:'checkgroup',label:'Exames solicitados',opcoes:EXAMES_ROTINA},
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: P59.9'},
       {key:'obs',tipo:'textarea',label:'Outros exames / Indicação clínica (um por linha)',ph:'Ultrassonografia de quadril para rastreamento de DDQ\nUltrassom transfontanela (USTF)'}
     ]
   },
@@ -640,6 +643,7 @@ const DOCS = [
     label:'Laboratório de Patologia Clínica — CPA (HUB)', nota:'Formulário oficial do laboratório HUB (Bilirrubinas, hemograma, etc.)',
     campos:[
       {key:'itens',tipo:'checkgroup',label:'Exames laboratoriais',opcoes:LAB_ALL,agrupado:true,padrao:['BIOQUÍMICA · Bilirrubina total e frações']},
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: P59.9'},
       {key:'indic',tipo:'text',label:'Identificação clínica',padrao:'Icterícia neonatal a esclarecer / rastreio de alta',ph:'Icterícia neonatal'}
     ]
   },
@@ -647,18 +651,22 @@ const DOCS = [
   /* ---------- encaminhamentos e retornos ---------- */
   {
     id:'ret_ped48', grupo:'Encaminhamentos', tpl:'band',
-    label:'Retorno em 48h — Pediatria HUB', nota:'Reavaliação neonatal precoce (icterícia / aleitamento / peso)',
-    titulo:'Reavaliação Neonatal em 48 Horas — Pediatria HUB',
+    label:'Retorno no Alcon (48h)', nota:'Reavaliação neonatal precoce (icterícia / aleitamento / peso)',
+    titulo:'Reavaliação Neonatal — Ambulatório de Consultas (Alcon / HUB)',
     campos:[
-      {key:'quando',tipo:'date',label:'Data do retorno (48h após alta)'},
-      {key:'motivo',tipo:'text',label:'Motivo da reavaliação',padrao:'Reavaliação de icterícia neonatal, padrão de sucção e ganho ponderal'}
+      {key:'horas',tipo:'select',label:'Retorno em',opcoes:['24 horas','48 horas','72 horas','96 horas'],padrao:'48 horas'},
+      {key:'quando',tipo:'date',label:'Data do retorno'},
+      {key:'motivo',tipo:'text',label:'Motivo da reavaliação',padrao:'Reavaliação de icterícia neonatal, padrão de sucção e ganho ponderal'},
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: P59.9'}
     ],
     body(v){
-      const d = v.quando ? br(v.quando) : (state.data ? br(addDays(state.data, 2)) : '___/___/_____');
-      return '<p>O recém-nascido deverá comparecer à <b>Pediatria do Hospital Universitário de Brasília (HUB)</b> para reavaliação clínica:</p>'
-        + '<div class="alert"><p><b>DATA DO RETORNO: ' + esc(d) + '</b></p>'
-        + '<p><b>Local:</b> Ambulatório de Pediatria / Pronto-Socorro Pediátrico do HUB.</p>'
-        + '<p><b>Motivo:</b> ' + esc(v.motivo || 'Reavaliação de icterícia neonatal e aleitamento materno') + '.</p></div>'
+      const horas = v.horas || '48 horas';
+      const d = v.quando ? br(v.quando) : (state.data ? br(addDays(state.data, parseInt(horas)||2)) : '___/___/_____');
+      return '<p>O recém-nascido deverá comparecer ao <b>Ambulatório de Consultas (Alcon) do Hospital Universitário de Brasília (HUB)</b> para reavaliação clínica:</p>'
+        + '<div class="alert"><p><b>RETORNO EM: ' + esc(horas) + ' — DATA: ' + esc(d) + '</b></p>'
+        + '<p><b>Local:</b> Alcon — HUB (Ambulatório de Consultas).</p>'
+        + '<p><b>Motivo:</b> ' + esc(v.motivo || 'Reavaliação de icterícia neonatal e aleitamento materno') + '.</p>'
+        + (v.cid ? '<p><b>CID:</b> ' + esc(v.cid) + '</p>' : '') + '</div>'
         + '<p><b>Orientações aos pais:</b> Trazer a Caderneta da Criança, resultados de exames e relatórios de internação.</p>';
     }
   },
@@ -668,13 +676,15 @@ const DOCS = [
     titulo:'Ambulatório de Crescimento e Desenvolvimento (C&D) — HUB',
     campos:[
       {key:'quando',tipo:'date',label:'Data prevista'},
-      {key:'motivo',tipo:'text',label:'Indicação clínica',padrao:'Seguimento do desenvolvimento neuropsicomotor e crescimento'}
+      {key:'motivo',tipo:'text',label:'Indicação clínica',padrao:'Seguimento do desenvolvimento neuropsicomotor e crescimento'},
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: P07.3'}
     ],
     body(v){
       return '<p>Encaminho o recém-nascido para acompanhamento especializado no <b>Ambulatório de Crescimento e Desenvolvimento (C&D) do HUB</b>.</p>'
         + '<div class="alert"><p><b>Consulta agendada/prevista para:</b> ' + (v.quando ? esc(br(v.quando)) : '___/___/_____') + '</p>'
         + '<p><b>Indicação:</b> ' + esc(v.motivo || 'Seguimento de puericultura especializada / C&D') + '</p>'
-        + '<p><b>Local:</b> Prédio dos Ambulatórios do HUB — Pediatria.</p></div>'
+        + (v.cid ? '<p><b>CID:</b> ' + esc(v.cid) + '</p>' : '')
+        + '<p><b>Local:</b> Térreo da UCA (Unidade da Criança e do Adolescente) — HUB.</p></div>'
         + '<p><b>Telefone para marcação e informações:</b> (61) 2028-5232 / 2028-5000.</p>';
     }
   },
@@ -706,20 +716,13 @@ const DOCS = [
   },
   {
     id:'parecer', grupo:'Encaminhamentos', tpl:'par', full:true,
-    label:'Solicitação de Parecer — HUB (Cirurgia Geral)',
+    label:'Solicitação de Parecer — HUB',
     nota:'Formulário oficial do HUB (papelada-HUB) — folha inteira com linhas para resposta',
     campos:[
-      {key:'clinica',tipo:'text',label:'Para a clínica',padrao:'Cirurgia Geral',ph:'Cirurgia Geral ou Cirurgia Pediátrica'},
-      {key:'motivo',tipo:'textarea',label:'Motivo da consulta (até 5 linhas)',padrao:'RN internado na Unidade Neonatal do HUB. Solicita-se avaliação e parecer da equipe de Cirurgia Geral quanto a...',ph:'Dados sobre os quais deseja opinião e principais sintomas do paciente.'}
-    ]
-  },
-  {
-    id:'parecer_ses', grupo:'Encaminhamentos', tpl:'parses', full:true,
-    label:'Pedido de Parecer — SES-DF',
-    nota:'Formulário oficial SES-DF (papelada-HUB) — folha inteira',
-    campos:[
-      {key:'clinica',tipo:'text',label:'Para a clínica (especialidade)',padrao:'Cirurgia Geral',ph:'Ex.: Cirurgia Pediátrica, Cardiologia'},
-      {key:'motivo',tipo:'textarea',label:'Motivo da consulta',padrao:'RN internado na Unidade Neonatal do HUB. Solicita-se parecer da clínica quanto a...',ph:'Dados sobre os quais deseja opinião e principais sintomas do paciente.'}
+      {key:'clinica',tipo:'select',label:'Especialidade',opcoes:['Cirurgia Geral','Oftalmologia'],padrao:'Cirurgia Geral'},
+      {key:'clinica_livre',tipo:'text',label:'Especialidade (livre — preencha se não estiver na lista)',ph:'ex.: Cardiologia Pediátrica'},
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: Q40.0'},
+      {key:'motivo',tipo:'textarea',label:'Motivo da consulta (até 5 linhas)',padrao:'RN internado na Unidade Neonatal do HUB. Solicita-se avaliação e parecer da equipe quanto a...',ph:'Dados sobre os quais deseja opinião e principais sintomas do paciente.'}
     ]
   },
 
@@ -735,7 +738,7 @@ const DOCS = [
         + '<li>Leite materno sob livre demanda (sempre que demonstrar fome). Não ofertar água, chás ou outros leites.</li>'
         + '<li>Garantir pega correta: boca bem aberta, lábios evertidos e queixo encostado na mama para evitar dor e fissuras.</li></ul>'
         + '<p><b>2. Cuidados com o coto umbilical</b></p><ul>'
-        + '<li>Limpar a base a cada troca de fralda com álcool a 70% e algodão/gaze limpa. Manter limpo e seco.</li>'
+        + '<li>Limpar a base a cada troca de fralda com <b>água e sabão neutro</b> (sem álcool ou clorexidina). Manter limpo e seco.</li>'
         + '<li>Deixar a fralda abaixo do coto. Costuma cair entre 7 e 15 dias. Não colocar faixas ou moedas.</li></ul>'
         + '<p><b>3. Banho e higiene do bebê</b></p><ul>'
         + '<li>Banho diário em água morna e ambiente sem correntes de ar. Usar sabonete neutro infantil.</li>'
@@ -743,8 +746,8 @@ const DOCS = [
         + '<p><b>4. Sono seguro</b></p><ul>'
         + '<li>Dormir <b>sempre de barriga para cima</b> (decúbito dorsal) em colchão firme.</li>'
         + '<li>Não usar travesseiros, protetores fofos de berço ou bichos de pelúcia onde o bebê dorme.</li></ul>'
-        + '<p><b>5. Vitamina D e banho de sol</b></p><ul>'
-        + '<li>Banho de sol: 10 a 15 min/dia, antes das 10h ou após as 16h, com pernas/braços expostos.</li>'
+        + '<p><b>5. Vitamina D e exposição solar</b></p><ul>'
+        + '<li>Não expor o recém-nascido ao sol diretamente. Preferir ambientes iluminados sem exposição solar direta.</li>'
         + '<li>Administrar a Vitamina D (200 UI/gota, 2 gotas/dia) diariamente conforme receita médica.</li></ul>'
         + '<p><b>6. Vacinas e triagens</b></p><ul>'
         + '<li>Realizar o Teste do Pezinho entre o 3º e 5º dia de vida na UBS mais próxima.</li>'
@@ -754,9 +757,9 @@ const DOCS = [
   },
   {
     id:'ps', grupo:'Orientações aos pais', tpl:'band',
-    label:'Voltar ao Pronto-Socorro se…',
+    label:'Buscar UPA ou Serviço de Referência se…',
     nota:'Sinais de alarme no RN — febre, hipotermia, gemência, icterícia',
-    titulo:'Voltar ao Pronto-Socorro Imediatamente se o Bebê Apresentar:', semAssinatura:true,
+    titulo:'Buscar UPA ou Serviço de Referência Imediatamente se o Bebê Apresentar:', semAssinatura:true,
     body(){
       return '<div class="alert"><ol style="margin:0;padding-left:4.5mm;line-height:1.35">'
         + '<li><b>Febre</b> (temperatura axilar &ge; 37,8 &deg;C) ou <b>hipotermia</b> (temperatura &le; 36,0 &deg;C).</li>'
@@ -773,9 +776,9 @@ const DOCS = [
   },
   {
     id:'triagens', grupo:'Orientações aos pais', tpl:'band',
-    label:'Triagens neonatais e vacinas',
-    nota:'Resumo do Teste do Pezinho, Olhinho, Orelhinha, Coraçãozinho e vacinas',
-    titulo:'Triagens Neonatais e Calendário Vacinal do Recém-Nascido', semAssinatura:true,
+    label:'Triagens neonatais',
+    nota:'Resumo do Teste do Pezinho, Olhinho, Orelhinha, Coraçãozinho e Linguinha',
+    titulo:'Triagens Neonatais do Recém-Nascido', semAssinatura:true,
     body(){
       return '<div class="cols2 compact">'
         + '<p><b>1. Teste do Pezinho (Triagem Biológica)</b></p>'
@@ -788,10 +791,30 @@ const DOCS = [
         + '<p>Triagem de cardiopatias congênitas críticas realizada entre 24h e 48h de vida.</p>'
         + '<p><b>5. Teste da Linguinha</b></p>'
         + '<p>Avaliação anatômica e funcional do frênulo lingual para diagnóstico de anquiloglossia.</p>'
-        + '<p><b>6. Vacinas do Recém-Nascido</b></p>'
-        + '<p>&bull; <b>BCG:</b> dose única para proteção contra formas graves de tuberculose.<br>'
-        + '&bull; <b>Hepatite B:</b> primeira dose aplicada nas primeiras 24 horas de vida.</p>'
         + '</div>';
+    }
+  },
+  {
+    id:'vacinas', grupo:'Orientações aos pais', tpl:'band',
+    label:'Calendário vacinal — 1º ano de vida',
+    nota:'Calendário completo do 1º ano segundo o Ministério da Saúde',
+    titulo:'Calendário Vacinal do 1º Ano de Vida — Ministério da Saúde', semAssinatura:true,
+    body(){
+      const rows = [
+        ['Ao nascer', 'BCG (dose única) + Hepatite B (1ª dose)'],
+        ['1 mês', 'Hepatite B (2ª dose)'],
+        ['2 meses', 'Pentavalente (DTP+Hib+HepB) 1ª dose · VIP (Polio inativada) 1ª dose · VRH (Rotavírus) 1ª dose · PCV10 (Pneumocócica 10v) 1ª dose'],
+        ['3 meses', 'Pentavalente 2ª dose · VIP 2ª dose · VRH 2ª dose · Meningocócica C 1ª dose'],
+        ['4 meses', 'Pentavalente 3ª dose · VIP 3ª dose · PCV10 2ª dose · Meningocócica C 2ª dose'],
+        ['6 meses', 'Hepatite B (3ª dose) · Influenza (anual, a partir dos 6 meses)'],
+        ['9 meses', 'Febre Amarela (1ª dose) · Meningocócica C (reforço)'],
+        ['12 meses', 'Tríplice viral (SCR) 1ª dose · PCV10 (reforço) · Varicela (SCRV) 1ª dose']
+      ];
+      return '<table class="tbl">'
+        + '<thead><tr><th>Idade</th><th>Vacinas</th></tr></thead><tbody>'
+        + rows.map(r => '<tr><td><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td></tr>').join('')
+        + '</tbody></table>'
+        + '<p class="small" style="margin-top:2mm">Fonte: Calendário Nacional de Vacinação — Ministério da Saúde 2024. Realize as vacinas na UBS mais próxima.</p>';
     }
   },
   {
@@ -813,15 +836,49 @@ const DOCS = [
       return '<p class="d-sub">Bancos de Leite Humano</p><table class="tbl">' + linhas(blh) + '</table>'
         + '<p class="small center" style="margin-top:2mm"><b>Dificuldade para amamentar ou excesso de leite? Procure o Banco de Leite do HUB. Doe leite materno.</b></p>';
     }
+  },
+  {
+    id:'urgencias_df', grupo:'Orientações aos pais', tpl:'band',
+    label:'Onde buscar atendimento pediátrico de urgência no DF',
+    nota:'Lista de UPAs, hospitais e serviços pediátricos do DF',
+    titulo:'Atendimento Pediátrico de Urgência no Distrito Federal', semAssinatura:true, semId:true,
+    body(){
+      const upas = [
+        ['UPA Samambaia','QN 303, Conjunto 2, Samambaia Sul','(61) 3901-2890'],
+        ['UPA Ceilândia','QNN 25, Área Especial 1, Ceilândia Norte','(61) 3901-1420'],
+        ['UPA Taguatinga','QNG 44, Área Especial, Taguatinga Norte','(61) 3901-2820'],
+        ['UPA Brazlândia','Setor Tradicional, Q. 10, Brazlândia','(61) 3901-1374'],
+        ['UPA Planaltina','Setor Habitacional Tradicional, Planaltina','(61) 3901-1382'],
+        ['UPA Sobradinho','Quadra 8, Área Especial, Sobradinho I','(61) 3901-1395'],
+        ['UPA Recanto das Emas','Quadra 103, Recanto das Emas','(61) 3901-2855'],
+        ['UPA Santa Maria','Quadra 304, Santa Maria','(61) 3901-1402'],
+        ['UPA Núcleo Bandeirante','Área Especial 1, Núcleo Bandeirante','(61) 3901-1416'],
+        ['UPA Gama','Quadra 1, Setor Leste, Gama','(61) 3901-1428']
+      ];
+      const hosps = [
+        ['HMIB (Hospital Materno Infantil de Brasília)','SGAS 613, Asa Sul — referência pediátrica SUS','(61) 3449-7600'],
+        ['HCB (Hospital da Criança de Brasília)','SMHN Q. 101, Área Especial, Asa Norte','(61) 3545-3000'],
+        ['HRC (Hospital Regional de Ceilândia)','Área Especial 01, QNM 17, Ceilândia','(61) 3471-9400'],
+        ['HRT (Hospital Regional de Taguatinga)','Setor C Área Norte 24, Taguatinga','(61) 3451-9600'],
+        ['HRAN (Hospital Regional da Asa Norte)','SMHN Q. 101, Área Especial, Asa Norte','(61) 3325-5050'],
+        ['HUB (Hospital Universitário de Brasília)','SGAN 605, Av. L2 Norte — internação neonatal','(61) 2028-5000']
+      ];
+      const mk = a => a.map(r => '<tr><td><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>').join('');
+      return '<p class="d-sub">UPAs Pediátricas 24h — DF</p>'
+        + '<table class="tbl"><thead><tr><th>UPA</th><th>Endereço</th><th>Telefone</th></tr></thead><tbody>' + mk(upas) + '</tbody></table>'
+        + '<p class="d-sub" style="margin-top:2mm">Hospitais com Atendimento Pediátrico</p>'
+        + '<table class="tbl"><thead><tr><th>Hospital</th><th>Endereço</th><th>Telefone</th></tr></thead><tbody>' + mk(hosps) + '</tbody></table>'
+        + '<p class="small center" style="margin-top:2mm">Em emergências, ligue <b>192 (SAMU)</b> ou <b>193 (Bombeiros)</b>. Para dúvidas não urgentes, procure a UBS de referência.</p>';
+    }
   }
 ];
 
 /* ======================= ESTADO ======================= */
 const state = {
   nome:'', reg:'', data:'', dn:'', leito:'', peso:'', ig:'',
-  alim:'ame', retorno:'baixo',
+  alim:'ame', retorno:'baixo', retornos:new Set(['baixo']),
   sel:new Set(), vals:{},
-  partic:[], base:new Set(['orientacoes','ps','triagens','rx_vitd','leite']), autoOn:new Set()
+  partic:[], base:new Set(['orientacoes','ps','triagens','vacinas','rx_vitd','leite']), autoOn:new Set()
 };
 
 DOCS.forEach(d => {
@@ -912,6 +969,7 @@ function tplLab(d, v){
 /* Solicitação de parecer oficial HUB — fiel ao PDF de papelada-HUB */
 function tplPar(d, v){
   let linhas = ''; for(let i=0;i<21;i++) linhas += '<i></i>';
+  const especialidade = (v.clinica_livre && v.clinica_livre.trim()) ? v.clinica_livre.trim() : (v.clinica || 'Cirurgia Geral');
   return '<div class="t-par">'
     + '<div class="r hd"><div class="c" style="padding:2mm 3mm"><img src="' + LOGO_UE + '" alt=""></div>'
       + '<div class="c grow tt">HOSPITAL UNIVERSITÁRIO DE BRASÍLIA<br>SOLICITAÇÃO DE PARECER</div>'
@@ -920,7 +978,8 @@ function tplPar(d, v){
       + '<div class="c" style="width:30mm"><b>ENF.</b> Neo</div>'
       + '<div class="c" style="width:30mm"><b>LEITO:</b> ' + esc(state.leito) + '</div></div>'
     + '<div class="r"><div class="c grow"><b>DA CLÍNICA:</b> ' + esc(CLINICA) + '</div>'
-      + '<div class="c grow"><b>A CLÍNICA:</b> ' + esc(v.clinica || 'Cirurgia Geral') + '</div></div>'
+      + '<div class="c grow"><b>A CLÍNICA:</b> ' + esc(especialidade) + '</div></div>'
+    + (v.cid ? '<div class="r"><div class="c grow"><b>CID:</b> ' + esc(v.cid) + '</div></div>' : '')
     + '<div class="motivo-l">MOTIVO DA CONSULTA: (ESPECIFICAR OS DADOS SOBRE OS QUAIS DESEJA OPINAR E ENUMERAR OS PRINCIPAIS SINTOMAS DO ENFERMO)</div>'
     + '<div class="motivo">' + esc(v.motivo || '') + '</div>'
     + '<div class="sg"><div><div class="ln"></div>' + esc(br(state.data) || '____/____/______') + ' — DATA</div>'
@@ -1094,16 +1153,16 @@ function buildQuick(){
 
 function paintQuick(){
   document.querySelectorAll('#q-alim button').forEach(b => b.classList.toggle('on', b.dataset.alim === state.alim));
-  document.querySelectorAll('#q-ret button').forEach(b => b.classList.toggle('on', b.dataset.ret === state.retorno));
+  document.querySelectorAll('#q-ret button').forEach(b => b.classList.toggle('on', state.retornos.has(b.dataset.ret)));
   document.querySelectorAll('#q-part button').forEach(b => b.classList.toggle('on', state.partic.indexOf(b.dataset.part) >= 0));
   document.querySelectorAll('#q-base button').forEach(b => b.classList.toggle('on', state.base.has(b.dataset.base)));
 }
 
 function applyQuick(){
-  // Retornos
-  setDoc('ret_ped48', state.retorno === 'ped48');
-  setDoc('ret_cd',    state.retorno === 'cd');
-  setDoc('ret_baixo', state.retorno === 'baixo');
+  // Retornos — independentes, cada um pode estar on/off separado
+  setDoc('ret_ped48', state.retornos.has('ped48'));
+  setDoc('ret_cd',    state.retornos.has('cd'));
+  setDoc('ret_baixo', state.retornos.has('baixo'));
 
   // Particularidades
   const ex = [];
@@ -1140,7 +1199,9 @@ document.querySelector('.panel-body').addEventListener('click', e => {
     paintQuick();
     render();
   } else if(b.dataset.ret){
-    state.retorno = state.retorno === b.dataset.ret ? null : b.dataset.ret;
+    const r = b.dataset.ret;
+    state.retornos.has(r) ? state.retornos.delete(r) : state.retornos.add(r);
+    state.retorno = state.retornos.size ? [...state.retornos][state.retornos.size-1] : null;
     applyQuick();
   } else if(b.dataset.ex){
     const ex = b.dataset.ex;
