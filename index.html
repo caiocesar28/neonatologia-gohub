@@ -103,7 +103,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 .doc{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:var(--surface-2);transition:border-color .15s,background .15s}
 .doc:last-child{margin-bottom:0}
 .doc.on{background:var(--surface);border-color:var(--accent)}
-.doc-main{{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.doc-main{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
 .doc-main input[type=checkbox]{margin-top:3px;accent-color:var(--accent);width:16px;height:16px}
 .doc-title{font-weight:600;font-size:13.5px;color:var(--ink);display:block}
 .doc-note{font-size:11.5px;color:var(--ink-3);display:block;margin-top:2px}
@@ -137,153 +137,188 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 .preview-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
 .preview-head h2{margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .preview-head span{font-size:12px;color:var(--ink-3)}
-#stage{display:flex;flex-direction:column;gap:24px}
-.empty{background:var(--surface);border:1px dashed var(--line-2);border-radius:10px;padding:60px 24px;
-  text-align:center;color:var(--ink-3);font-size:14px}
+#stage{display:flex;flex-direction:column;align-items:center;gap:22px}
+.sheet-wrap{width:100%;display:flex;justify-content:center}
+.empty{border:1px dashed var(--line-2);border-radius:10px;padding:52px 24px;text-align:center;color:var(--ink-3);font-size:14px;background:var(--surface)}
 
-.sheet-wrap{position:relative;background:var(--surface);box-shadow:var(--shadow);border-radius:4px;overflow:hidden}
-.sheet{width:210mm;height:297mm;background:#fff;color:#000;position:absolute;top:0;left:0;transform-origin:top left;
-  display:grid;grid-template-rows:1fr 1fr;box-sizing:border-box;font-family:'IBM Plex Sans',Arial,Helvetica,sans-serif}
-.slot{padding:9mm 12mm;box-sizing:border-box;overflow:hidden;position:relative;display:flex;flex-direction:column}
-.slot + .slot{border-top:1px dashed #999}
-.slot.full{grid-row:1 / span 2;padding:12mm 14mm}
+/* ======================= folhas impressas ======================= */
+.sheet{width:210mm;height:297mm;background:#fff;color:#000;flex:none;
+  display:flex;flex-direction:column;transform-origin:top center;
+  box-shadow:0 2px 6px rgba(0,0,0,.12),0 14px 40px rgba(0,0,0,.14);overflow:hidden;
+  font-family:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;box-sizing:border-box}
+.slot{flex:0 0 148.5mm;height:148.5mm;padding:7mm 12mm 6mm;display:flex;flex-direction:column;overflow:hidden;position:relative;box-sizing:border-box}
+.slot + .slot::before{content:'';position:absolute;top:0;left:0;right:0;border-top:1px dashed #9aa5a0}
+.slot.full{flex:0 0 297mm;height:297mm;padding:11mm 12mm;box-sizing:border-box}
 
 .mono{font-family:'IBM Plex Mono',monospace}
 .switch{display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none}
 .switch input{accent-color:var(--accent);width:15px;height:15px}
 
 /* ==================== impressos ==================== */
-.d-logo{height:14mm;width:auto;object-fit:contain;margin-bottom:2mm;display:block}
-.d-id{font-size:9pt;border-top:.8pt solid #000;border-bottom:.8pt solid #000;padding:1.5mm 0;margin-bottom:3mm;
-  display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace}
-.d-id .nm{font-weight:600}
-.d-title{font-family:'IBM Plex Serif',Georgia,serif;font-size:13pt;font-weight:600;margin:0 0 2mm;text-align:center;letter-spacing:-.01em}
-.d-sub{font-size:8.5pt;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#444;margin:2mm 0 1mm}
-.d-body{font-size:9pt;line-height:1.35;flex:1;min-height:0}
-.d-body p{margin:0 0 1.5mm}
-.d-body ul,.d-body ol{margin:0 0 2mm;padding-left:4mm}
-.d-body li{margin-bottom:1mm}
-.d-foot{display:flex;justify-content:space-between;align-items:flex-end;font-size:8pt;color:#333;margin-top:auto;padding-top:2mm}
-.d-sign{display:flex;flex-direction:column;align-items:center;width:60mm;text-align:center}
-.d-sign .rule{border-top:.6pt solid #000;width:100%;margin-bottom:1mm}
-.small{font-size:7.5pt;color:#444;line-height:1.3}
-.center{text-align:center}
-.cols2{columns:2;column-gap:6mm}
-.tbl{width:100%;border-collapse:collapse;font-size:8pt;margin-top:1.5mm}
-.tbl td{padding:1.2mm 1.5mm;border-bottom:.4pt solid #ccc;vertical-align:top}
-.tbl td:first-child{font-weight:600;width:32%}
-.alert{border:1pt solid #000;border-radius:2mm;padding:2mm 3mm;margin:2mm 0;background:#fafafa}
-.alert p{margin:0}
+.d-logo{width:118mm;height:auto;display:block;margin-bottom:2.5mm}
+.d-id{display:flex;gap:8mm;font-size:9pt;border-bottom:.4pt solid #000;padding-bottom:1.2mm;margin-bottom:3mm}
+.d-id b{font-weight:600;letter-spacing:.04em}
+.d-id .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.d-id .rg{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+.d-title{font-size:11pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin:0 0 2.5mm;text-align:center}
+.d-sub{font-size:8.5pt;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin:0 0 2mm}
+.d-body{flex:1;font-size:9pt;line-height:1.34;min-height:0}
+.d-body p{margin:0 0 1.6mm}
+.d-body ol,.d-body ul{margin:0 0 1.6mm;padding-left:5mm}
+.d-body li{margin-bottom:.8mm}
+.d-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8mm;font-size:8.5pt;padding-top:2mm;margin-top:2mm}
+.d-sign{text-align:center;min-width:72mm}
+.d-sign .rule{border-top:.4pt solid #000;margin-bottom:.8mm}
+.d-sign small{font-size:7pt;letter-spacing:.03em}
 
-/* Receituário comum */
-.t-rec{display:flex;flex-direction:column;height:100%;font-size:9pt;line-height:1.35}
-.t-rec .logo{height:13mm;width:auto;object-fit:contain;align-self:center;margin-bottom:1.5mm}
-.t-rec .ttl{font-family:'IBM Plex Serif',Georgia,serif;font-size:12pt;font-weight:600;text-align:center;margin:0 0 2.5mm;letter-spacing:.05em}
-.t-rec .pac{display:flex;justify-content:space-between;border-top:.8pt solid #000;border-bottom:.8pt solid #000;padding:1.5mm 0;margin-bottom:3mm;font-size:9.5pt}
-.t-rec .corpo{flex:1;min-height:0}
-.t-rec .fim{margin-top:auto;display:flex;flex-direction:column;align-items:center;font-size:8pt;text-align:center}
-.t-rec .dash{border-top:.6pt dashed #000;width:65mm;margin-bottom:1mm}
-.t-rec .cap{font-size:7.5pt;color:#222;margin-bottom:1.5mm}
-.t-rec .end{font-size:7pt;color:#444;line-height:1.2}
-ol.rx{margin:0;padding-left:4mm}
-ol.rx li{margin-bottom:2.2mm}
-ol.rx .lead{display:flex;align-items:baseline}
-ol.rx .lead .nm{font-weight:600}
-ol.rx .lead .fill{flex:1;border-bottom:.4pt dotted #888;margin:0 2mm;height:1em}
-ol.rx .lead .qt{font-weight:600;white-space:nowrap}
-ol.rx .pos{margin-top:.5mm}
+.rx{list-style:none;padding:0;margin:0}
+.rx li{margin-bottom:2.5mm}
+.rx .lead{display:flex;align-items:baseline;gap:1.5mm;font-size:9.5pt;font-weight:600}
+.rx .lead .nm{white-space:nowrap}
+.rx .lead .fill{flex:1;border-bottom:.5pt dotted #000;transform:translateY(-.5mm)}
+.rx .lead .qt{white-space:nowrap}
+.rx .pos{font-size:8.5pt;padding-left:4mm;line-height:1.3}
+.rx .en{font-size:7.6pt;padding-left:4mm;font-style:italic;color:#333}
+
+.cols2{column-count:2;column-gap:7mm}
+.cols2 > *{break-inside:avoid}
+.cols2.compact{font-size:8.2pt;line-height:1.24}
+.cols2.compact p{margin:0 0 1mm}
+.cols2.compact ul{margin:0 0 1.2mm;padding-left:4mm}
+.cols2.compact li{margin-bottom:.5mm}
+
+.alert{border:.6pt solid #000;padding:2.5mm 3mm;margin-bottom:2mm}
+.blank-line{border-bottom:.4pt solid #000;height:5mm}
+.blank-area{border:.4pt solid #000;flex:1;min-height:24mm}
+.freetext{white-space:pre-wrap;font-family:'IBM Plex Sans',Arial,sans-serif;font-size:9pt;line-height:1.4}
+.tbl{width:100%;border-collapse:collapse;font-size:6.9pt;line-height:1.18}
+.tbl td{border-bottom:.3pt solid #bbb;padding:.4mm 1.2mm;vertical-align:top}
+.tbl td:first-child{font-weight:700;white-space:nowrap}
+.small{font-size:8pt}
+.center{text-align:center}
+
+/* Receituário oficial HUB */
+.t-rec{font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;height:100%;display:flex;flex-direction:column}
+.t-rec .logo{width:44mm;margin:0 auto 1mm;display:block}
+.t-rec .ttl{text-align:center;font-size:11pt;font-weight:700;text-decoration:underline;margin:0 0 3.5mm}
+.t-rec .pac{display:flex;justify-content:space-between;gap:6mm;font-size:9pt;font-weight:700;margin-bottom:3.5mm;
+  border-bottom:.4pt solid #000;padding-bottom:1.2mm}
+.t-rec .pac span{font-weight:400}
+.t-rec .corpo{flex:1;min-height:0;font-size:9pt}
+.t-rec .fim{text-align:center;font-size:8pt;margin-top:2.5mm}
+.t-rec .dash{border-top:1pt dashed #000;width:72mm;margin:0 auto 1mm}
+.t-rec .cap{font-size:6.8pt;margin-bottom:2.5mm}
+.t-rec .end{font-size:7.2pt;line-height:1.3}
+.t-rec .end b{font-size:7.6pt}
 
 /* Requisição de exames oficial HUB */
-.t-req{border:.8pt solid #000;display:flex;flex-direction:column;height:100%;font-size:8.5pt;line-height:1.25}
-.t-req .hd{display:flex;align-items:center;gap:3mm;padding:2mm 3mm;border-bottom:.8pt solid #000}}
-.t-req .hd img{height:11mm;width:auto}
-.t-req .hd .mec{font-size:7.5pt;line-height:1.1;border-right:.6pt solid #000;padding-right:3mm}
-.t-req .hd b{font-size:10pt;letter-spacing:.02em}
-.t-req .band{background:#e6e6e6;border-bottom:.8pt solid #000;text-align:center;font-weight:700;font-size:10pt;padding:1.2mm 0;letter-spacing:.08em}
+.t-req{font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;border:.8pt solid #000;height:100%;
+  display:flex;flex-direction:column;font-size:8pt}
+.t-req .hd{display:flex;align-items:center;gap:5mm;padding:1.5mm 2mm}
+.t-req .hd img{width:50mm}
+.t-req .hd .mec{font-size:5.8pt;line-height:1.1;text-align:center}
+.t-req .hd b{flex:1;text-align:center;font-size:9.5pt}
+.t-req .band{border-top:.8pt solid #000;border-bottom:.8pt solid #000;text-align:center;
+  font-weight:700;font-size:9.5pt;padding:.6mm 0}
 .t-req .r{display:flex;border-bottom:.8pt solid #000}
-.t-req .c{padding:1.2mm 2.5mm;border-right:.8pt solid #000}
+.t-req .c{padding:1mm 2mm;border-right:.8pt solid #000;min-height:7mm}
 .t-req .c:last-child{border-right:0}
-.t-req .c.grow{flex:1}
-.t-req .c .val{font-family:'IBM Plex Mono',monospace;font-weight:600}
-.t-req .nat{flex:1;min-height:0;padding:2mm 3mm;font-size:8.5pt}
-.t-req .nat ol{margin:0;padding-left:4mm}
-.t-req .nat li{margin-bottom:1mm}
-.t-req .sg{display:flex;border-top:.8pt solid #000}
-.t-req .sg > div{flex:1;padding:2mm 3mm;text-align:center;font-size:7.5pt;border-right:.8pt solid #000}
-.t-req .sg > div:last-child{border-right:0}
-.t-req .sg .ln{border-top:.6pt solid #000;margin:6mm 4mm 1mm}
-.t-req .ft{background:#f4f4f4;border-top:.8pt solid #000;font-size:6.5pt;text-align:center;padding:1mm 2mm;color:#333}
+.t-req .grow{flex:1;min-width:0}
+.t-req .val{font-weight:400;font-size:8.5pt}
+.t-req .nat{flex:1;padding:1.5mm 3mm;font-size:8.6pt;min-height:0;overflow:hidden}
+.t-req .nat ol{margin:1mm 0 0;padding-left:5mm}
+.t-req .nat li{margin-bottom:1.2mm}
+.t-req .sg{display:flex;justify-content:space-between;gap:8mm;padding:0 5mm 1.5mm;font-size:7.5pt;text-align:center}
+.t-req .sg > div{min-width:48mm}
+.t-req .sg .ln{border-top:.5pt solid #000;margin-bottom:.5mm}
+.t-req .ft{border-top:.8pt solid #000;text-align:center;font-size:6.6pt;padding:.7mm 0}
 
 /* Laboratório de patologia clínica CPA */
-.t-lab{border:.8pt solid #000;height:100%;display:flex;flex-direction:column;font-size:7pt;line-height:1.15;font-family:Arial,sans-serif}
-.t-lab .main{flex:1;padding:1.5mm 2mm;display:flex;flex-direction:column}
-.t-lab .hd{display:flex;align-items:center;gap:2mm;margin-bottom:1mm}
-.t-lab .hd img{height:7.5mm;width:auto}
-.t-lab .hd .mec{font-size:6.5pt;line-height:1}
-.t-lab .cab{border-top:.6pt solid #000;border-bottom:.6pt solid #000;padding:.8mm 0;margin-bottom:1mm;font-weight:700;display:flex;justify-content:space-between;font-size:7.5pt}
-.t-lab .cab .ctrl{font-weight:400;font-size:6.5pt}
-.t-lab .cab .ctrl u{display:inline-block;width:22mm;border-bottom:.6pt solid #000;margin-left:1mm}
-.t-lab table.id{width:100%;border-collapse:collapse;margin-bottom:1mm;font-size:6.5pt}
-.t-lab table.id td{border:.4pt solid #000;padding:.7mm 1.2mm}
-.t-lab .box{display:grid;grid-template-columns:1.05fr 1.05fr .9fr;border:.6pt solid #000;flex:1;min-height:0}
-.t-lab .box > div{padding:1mm 1.2mm;border-right:.6pt solid #000}
-.t-lab .box > div:last-child{border-right:0}
-.t-lab .box h4{margin:0 0 .8mm;font-size:6.8pt;font-weight:700;text-transform:uppercase;border-bottom:.4pt solid #000;padding-bottom:.4mm}
-.t-lab .box h4.sp{margin-top:1.5mm}
-.t-lab .ck{display:block;margin-bottom:.4mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.t-lab .ck i{font-style:normal;display:inline-block;width:3mm;text-align:center;font-weight:700}
-.t-lab .cpa{display:flex;border-top:.6pt solid #000;padding:1mm 0 0;margin-top:auto;font-size:6.5pt;align-items:center;gap:2mm}
-.t-lab .cpa .bx{border:.4pt solid #000;padding:1mm 2mm;display:flex;gap:1.5mm}
-.t-lab .cpa .bx i{display:inline-block;width:2.5mm;height:2.5mm;border:.4pt solid #000}
-.t-lab .cpa .bx u{display:inline-block;width:16mm;border-bottom:.4pt solid #000}
-.t-lab .sig{margin-top:1.5mm;display:flex;flex-direction:column;align-items:flex-end;font-size:6.5pt}
-.t-lab .sig .ln{border-top:.6pt solid #000;width:45mm;margin-bottom:.6mm}
-.t-lab .proto{border-top:.8pt solid #000;background:#f2f2f2;padding:1mm 2mm;font-size:6pt;display:flex;align-items:center}
-.t-lab .proto .t{font-weight:700;margin-right:2mm}
-.t-lab .proto u{display:inline-block;width:16mm;border-bottom:.4pt solid #000}
+.t-lab{font-family:'Times New Roman',Times,serif;height:100%;display:flex;gap:3mm;font-size:7.8pt}
+.t-lab .main{flex:1;min-width:0;display:flex;flex-direction:column}
+.t-lab .hd{display:flex;align-items:center;gap:3mm;margin-bottom:1.2mm}
+.t-lab .hd img{width:48mm}
+.t-lab .hd .mec{font-family:Arial,sans-serif;font-size:6pt;line-height:1.1;text-align:center}
+.t-lab .cab{display:flex;align-items:baseline;gap:2mm;font-weight:700;font-size:8.4pt;margin-bottom:.8mm}
+.t-lab .cab .ctrl{flex:1}
+.t-lab .cab .ctrl u{font-weight:400;display:inline-block;min-width:18mm;border-bottom:.5pt solid #000;text-decoration:none}
+.t-lab table.id{width:100%;border-collapse:collapse;font-size:7.4pt}
+.t-lab table.id td{border:.6pt solid #000;padding:.8mm 1.2mm;height:6.4mm;vertical-align:top}
+.t-lab .box{border:.6pt solid #000;margin-top:1.5mm;padding:1.5mm 2.5mm;flex:1;min-height:0;
+  display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:0 4mm;align-content:start}
+.t-lab h4{margin:0 0 .6mm;font-size:8.2pt;font-weight:700}
+.t-lab h4.sp{margin-top:2mm}
+.t-lab .ck{display:block;line-height:1.32;white-space:nowrap}
+.t-lab .ck i{font-style:normal;display:inline-block;width:3.6mm;text-align:center;font-weight:700}
+.t-lab .cpa{font-size:6.6pt;font-weight:700;margin-top:1mm}
+.t-lab .cpa .bx{display:flex;gap:1mm;margin-top:.5mm}
+.t-lab .cpa .bx i{display:block;border:.5pt solid #000;width:7mm;height:3.2mm}
+.t-lab .cpa .bx u{display:block;border:.5pt solid #ccc;flex:1;height:3.2mm;text-decoration:none}
+.t-lab .sig{text-align:right;margin-top:2mm;font-size:7pt}
+.t-lab .sig .ln{border-top:.5pt solid #000;width:52mm;margin-left:auto;margin-bottom:.4mm}
+.t-lab .proto{width:14mm;border-left:1pt dashed #000;padding-left:1.5mm;
+  writing-mode:vertical-rl;transform:rotate(180deg);font-size:6.4pt;line-height:1.9;overflow:hidden}
+.t-lab .proto u{text-decoration:none;border-bottom:.5pt solid #000;display:inline-block;min-width:14mm}
+.t-lab .proto .t{font-weight:700;text-decoration:underline}
 
-/* Parecer oficial HUB */
-.t-par{border:.8pt solid #000;height:100%;display:flex;flex-direction:column;font-size:8.5pt;line-height:1.25}
+/* Solicitação de parecer oficial HUB (modelo papelada-HUB / enfermaria-gohub) */
+.t-par{font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;border:.8pt solid #000;height:100%;
+  display:flex;flex-direction:column;font-size:8.4pt}
 .t-par .r{display:flex;border-bottom:.8pt solid #000}
-.t-par .c{padding:1.5mm 3mm;border-right:.8pt solid #000}
+.t-par .c{padding:1.2mm 2mm;border-right:.8pt solid #000;min-height:8mm}
 .t-par .c:last-child{border-right:0}
-.t-par .c.grow{flex:1}
-.t-par .hd img{height:11mm;width:auto}
-.t-par .hd .tt{font-weight:700;font-size:9.5pt;text-align:center;line-height:1.2}
-.t-par .motivo-l{font-size:7pt;font-weight:700;padding:1mm 3mm;background:#f2f2f2;border-bottom:.8pt solid #000}
-.t-par .motivo{padding:2mm 3mm;min-height:22mm;font-size:8.5pt;border-bottom:.8pt solid #000}
-.t-par .sg{display:flex}
-.t-par .sg > div{flex:1;padding:2mm 3mm;text-align:center;font-size:7.5pt;border-right:.8pt solid #000}
-.t-par .sg > div:last-child{border-right:0}
-.t-par .sg .ln{border-top:.6pt solid #000;margin:6mm 4mm 1mm}
-.t-par .pl{background:#e6e6e6;border-top:.8pt solid #000;border-bottom:.8pt solid #000;text-align:center;font-weight:700;font-size:9.5pt;padding:1mm 0;letter-spacing:.1em}
-.t-par .lines{flex:1;min-height:0;padding:0 3mm}
-.t-par .lines i{display:block;border-bottom:.4pt solid #ccc;height:5.5mm}
+.t-par .grow{flex:1;min-width:0}
+.t-par .hd img{width:48mm}
+.t-par .hd .tt{flex:1;text-align:center;font-weight:700;font-size:10pt;align-self:center;line-height:1.3}
+.t-par .motivo-l{text-align:center;font-weight:700;font-size:8pt;padding:1.4mm 6mm;line-height:1.25}
+.t-par .motivo{border:1pt solid #000;margin:0 3mm;min-height:64mm;padding:3mm;font-size:9.5pt;white-space:pre-wrap;line-height:1.45}
+.t-par .sg{display:flex;justify-content:space-between;gap:10mm;padding:1.5mm 3mm 2mm;font-size:7.4pt;text-align:center}
+.t-par .sg > div{min-width:62mm}
+.t-par .sg .ln{border-top:.5pt solid #000;margin-bottom:.5mm}
+.t-par .pl{font-weight:700;font-size:8pt;padding:1mm 3mm}
+.t-par .lines{flex:1;display:flex;flex-direction:column;border-top:.8pt solid #000}
+.t-par .lines i{flex:1;border-bottom:.5pt solid #000;min-height:6.6mm}
 
-/* Cartão de consulta / ambulatório */
-.t-cards{display:grid;grid-template-columns:1fr 1fr;gap:6mm;height:100%}
-.t-cards .card{border:1pt solid #000;padding:3mm 3.5mm;display:flex;flex-direction:column;font-size:8pt;line-height:1.3}
-.t-cards .card .hd{display:flex;align-items:center;gap:2mm;border-bottom:.6pt solid #000;padding-bottom:1.5mm;margin-bottom:2mm}
-.t-cards .card .hd img{height:8mm;width:auto}
-.t-cards .card .hd span{font-weight:700;font-size:9pt;letter-spacing:.08em}
-.t-cards .card .l{margin-bottom:1.5mm}
-.t-cards .card .l .v{font-weight:600;font-family:'IBM Plex Mono',monospace}
-.t-cards .card .mk{display:flex;gap:3mm;margin-top:.8mm}
-.t-cards .card .ft{margin-top:auto;border-top:.6pt solid #000;padding-top:1.5mm;font-size:7.5pt;display:flex;justify-content:space-between;font-weight:700}
+/* Pedido de parecer SES-DF (modelo papelada-HUB) */
+.t-parses{font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;border:.8pt solid #000;height:100%;
+  display:flex;flex-direction:column;font-size:8.4pt}
+.t-parses .hd{display:flex;align-items:center;gap:4mm;padding:2mm 3mm;border-bottom:.8pt solid #000}
+.t-parses .hd img{width:36mm}
+.t-parses .hd .tt{flex:1;text-align:center;font-weight:700;font-size:9.5pt;line-height:1.25}
+.t-parses .r{display:flex;border-bottom:.8pt solid #000}
+.t-parses .c{padding:1.2mm 2mm;border-right:.8pt solid #000;min-height:7.5mm}
+.t-parses .c:last-child{border-right:0}
+.t-parses .grow{flex:1;min-width:0}
+.t-parses .motivo-l{text-align:center;font-weight:700;font-size:8pt;padding:1.2mm 4mm;background:#f5f5f5;border-bottom:.8pt solid #000}
+.t-parses .motivo{margin:2mm 3mm;min-height:60mm;padding:2.5mm;font-size:9.5pt;white-space:pre-wrap;line-height:1.45;border:1pt solid #000}
+.t-parses .sg{display:flex;justify-content:space-between;gap:10mm;padding:1.5mm 3mm 2mm;font-size:7.4pt;text-align:center}
+.t-parses .sg > div{min-width:62mm}
+.t-parses .sg .ln{border-top:.5pt solid #000;margin-bottom:.5mm}
+.t-parses .pl{font-weight:700;font-size:8pt;padding:1mm 3mm;background:#f5f5f5;border-top:.8pt solid #000;border-bottom:.8pt solid #000}
+.t-parses .lines{flex:1;display:flex;flex-direction:column}
+.t-parses .lines i{flex:1;border-bottom:.5pt solid #000;min-height:6.6mm}
 
-.freetext{white-space:pre-wrap;font-family:'IBM Plex Sans',Arial,sans-serif;font-size:9pt;line-height:1.4}
-.blank-area{min-height:45mm;border:1px dashed #ccc;border-radius:4px;margin:3mm 0}
+/* Cartões de consulta / ambulatório */
+.t-cards{display:flex;gap:6mm;height:100%;align-items:flex-start;font-family:Arial,Helvetica,sans-serif}
+.card{border:.8pt solid #000;width:88mm;font-size:7.4pt}
+.card .hd{display:flex;border-bottom:.6pt solid #000}
+.card .hd img{width:32mm;padding:1mm 1.5mm;border-right:.6pt solid #000}
+.card .hd span{padding:1mm 2mm;align-self:center;font-size:7pt}
+.card .l{border-bottom:.6pt solid #000;padding:.9mm 1.5mm;min-height:6.4mm}
+.card .l .v{font-weight:700}
+.card .mk{display:flex;justify-content:space-between;gap:2mm;font-size:7pt;padding-top:.6mm}
+.card .ft{display:flex;gap:6mm;padding:1mm 1.5mm;font-size:7.4pt;font-weight:700}
 
 /* Impressão */
 @media print{
-  @page{size:A4 portrait;margin:0}
-  html,body{margin:0;padding:0;background:#fff}
+  @page{size:A4;margin:0}
+  body{background:#fff}
   .app{max-width:none;padding:0}
   .masthead,.rail,.preview-head,.privacy,.empty,.reminder{display:none !important}
   .layout{display:block}
   #stage{display:block;gap:0}
-  .sheet-wrap{display:block;height:auto !important;box-shadow:none}
-  .sheet{transform:none !important;position:static !important;box-shadow:none;break-after:page;page-break-after:always}
+  .sheet-wrap{display:block;height:auto !important}
+  .sheet{transform:none !important;box-shadow:none;break-after:page;page-break-after:always}
   .sheet-wrap:last-child .sheet{break-after:auto;page-break-after:auto}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -320,83 +355,84 @@ ol.rx .pos{margin-top:.5mm}
               <input type="date" id="data" class="mono">
             </div>
           </div>
-          <details class="more" style="margin-top:10px;border:0;padding-top:0">
-            <summary>Dados adicionais (nascimento, leito, peso)</summary>
-            <div class="row3" style="margin-top:10px">
-              <div class="field">
-                <label for="dn">Data Nascimento</label>
-                <input type="date" id="dn" class="mono">
-              </div>
-              <div class="field">
-                <label for="leito">Leito / Berço</label>
-                <input type="text" id="leito" autocomplete="off" placeholder="Berço 03 / Acon">
-              </div>
+          <div class="row3">
+            <div class="field">
+              <label for="dn">Data de nascimento</label>
+              <input type="date" id="dn" class="mono">
             </div>
-            <div class="row3" style="margin-top:6px">
-              <div class="field">
-                <label for="peso">Peso alta / nasc.</label>
-                <input type="text" id="peso" autocomplete="off" placeholder="3150 g / 3200 g">
-              </div>
-              <div class="field">
-                <label for="ig">Idade Gestacional</label>
-                <input type="text" id="ig" autocomplete="off" placeholder="39 sem + 2 d">
-              </div>
+            <div class="field">
+              <label for="leito">Leito / Berço <span class="opt">(opcional)</span></label>
+              <input type="text" id="leito" placeholder="ex.: 04 / Neo">
             </div>
-          </details>
+          </div>
+          <div class="row3">
+            <div class="field">
+              <label for="peso">Peso na alta <span class="opt">(g)</span></label>
+              <input type="text" id="peso" placeholder="ex.: 3.120 g">
+            </div>
+            <div class="field">
+              <label for="ig">Idade Gestacional</label>
+              <input type="text" id="ig" placeholder="ex.: 39s 2d">
+            </div>
+          </div>
 
+          <!-- Controles rápidos da neonatologia -->
           <div class="qgroup">
-            <div class="qlabel">Alimentação</div>
+            <div class="qlabel">Alimentação na alta</div>
             <div class="seg" id="q-alim">
-              <button data-alim="ame" class="on">Aleitamento Materno (AME)</button>
-              <button data-alim="formula">Fórmula / Misto</button>
+              <button type="button" data-alim="ame" class="on">AME (Peito exclusivo)</button>
+              <button type="button" data-alim="formula">Fórmula / Misto</button>
             </div>
           </div>
 
           <div class="qgroup">
-            <div class="qlabel">Retornos Programados</div>
-            <div class="tags" id="q-ret">
-              <button type="button" data-ret="ped48">Retorno 48h (Pediatria HUB)</button>
-              <button type="button" data-ret="cd">Ambulatório C&D (HUB)</button>
-              <button type="button" data-ret="baixo" class="on">UBS (Baixo Risco)</button>
+            <div class="qlabel">Retorno prioritário</div>
+            <div class="seg" id="q-ret">
+              <button type="button" data-ret="baixo" class="on">UBS (7-10d)</button>
+              <button type="button" data-ret="ped48">Pediatria 48h</button>
+              <button type="button" data-ret="cd">C&amp;D (HUB)</button>
             </div>
           </div>
 
           <div class="qgroup">
-            <div class="qlabel">Exames Rápidos</div>
+            <div class="qlabel">Exames &amp; Parecer rápidos</div>
             <div class="tags" id="q-exames">
-              <button type="button" data-ex="vitd" class="on">Vitamina D (2 gotas/dia)</button>
-              <button type="button" data-ex="bili">Bilirrubinas T+F</button>
+              <button type="button" data-ex="vitd" class="on">Vitamina D (200 UI)</button>
+              <button type="button" data-ex="bili">Bilirrubinas</button>
               <button type="button" data-ex="quadril">USG Quadril</button>
-              <button type="button" data-ex="ustf">USG Transfontanela</button>
+              <button type="button" data-ex="ustf">USTF</button>
               <button type="button" data-ex="cir">Parecer Cirurgia Geral</button>
             </div>
           </div>
 
           <div class="qgroup">
-            <div class="qlabel">Particularidades do RN <em>puxam exames e retornos</em></div>
+            <div class="qlabel">Particularidades / Condições de risco <em>(marca automaticamente)</em></div>
             <div class="tags" id="q-part"></div>
           </div>
 
           <div class="qgroup">
-            <div class="qlabel">Kit base <em>sempre vai na alta</em></div>
+            <div class="qlabel">Pacote de rotina da alta</div>
             <div class="tags" id="q-base"></div>
           </div>
 
-          <button type="button" class="jump" id="jump">↓ Todos os papéis do HUB — vitamina D, parecer cirurgia, USG quadril, USTF, bilirrubinas, C&D, retorno 48h…</button>
+          <button type="button" class="jump" id="jump">Ver e editar todos os documentos &darr;</button>
         </div>
 
-        <div class="panel-head" style="border-top:1px solid var(--line)" id="allhead">
-          <h2>Todos os papéis</h2>
-          <span class="count" id="count">nenhum</span>
+        <div class="panel-head" id="allhead" style="border-top:1px solid var(--line);margin-top:8px">
+          <h2>Todos os documentos</h2>
         </div>
         <div class="panel-body">
-          <p class="listnote">Tudo o que os botões acima ativam aparece marcado aqui. Você pode marcar ou desmarcar livremente e editar os campos dos formulários.</p>
+          <p class="listnote">Marque para incluir no PDF. Clique na setinha de cada um para personalizar doses, datas e textos.</p>
           <div id="list"></div>
         </div>
         </div>
 
         <div class="actions">
-          <button class="btn" id="print">Imprimir</button>
+          <button class="btn" id="print" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Imprimir
+          </button>
+          <span class="count" id="count">nenhum papel</span>
           <span class="count" id="sheets"></span>
         </div>
       </div>
@@ -414,7 +450,7 @@ ol.rx .pos{margin-top:.5mm}
       </div>
       <div class="preview-head">
         <h2>Pré-visualização</h2>
-        <span id="hint">A4 &middot; dois documentos por folha</span>
+        <span id="hint">A4 &middot; dois documentos por folha (ou folha inteira)</span>
       </div>
       <div id="stage"></div>
     </main>
@@ -460,11 +496,11 @@ function idade(dn, ref){
 }
 
 function rx(items){
-  return '<ol class="rx">' + items.filter(Boolean).map(it =>
+  return '<ul class="rx">' + items.filter(Boolean).map(it =>
     '<li><div class="lead"><span class="nm">' + esc(it.n) + '. ' + esc(it.nome) + '</span><span class="fill"></span><span class="qt">' + esc(it.qtd) + '</span></div>'
     + '<div class="pos">' + esc(it.pos) + '</div>'
-    + (it.obs ? '<div style="font-size:8pt;color:#555;margin-top:.5mm"><i>' + esc(it.obs) + '</i></div>' : '') + '</li>'
-  ).join('') + '</ol>';
+    + (it.obs ? '<div class="en">' + esc(it.obs) + '</div>' : '') + '</li>'
+  ).join('') + '</ul>';
 }
 function ck(marc, label){ return '<span class="ck">(<i>' + (marc ? 'X' : '&nbsp;') + '</i>) ' + esc(label) + '</span>'; }
 
@@ -582,7 +618,7 @@ const DOCS = [
     label:'Receituário em branco', nota:'Para prescrições adicionais personalizadas',
     campos:[
       {key:'via',tipo:'select',label:'Via',opcoes:['Uso oral','Uso tópico','Uso retal','Uso inalatório']},
-      {key:'texto',tipo:'textarea',label:'Prescrição',ph:'1. Paracetamol gotas 200 mg/mL .......... 1 frasco\n   Dar 1 gota por kg de peso de 6/6h em caso de dor ou febre.'}
+      {key:'texto',tipo:'textarea',label:'Prescrição',ph:'1. Paracetamol gotas 200 mg/mL .......... 01 frasco\n   Dar 1 gota por kg de peso de 6/6h em caso de dor ou febre.'}
     ],
     body(v){
       return '<p class="d-sub">' + esc(v.via || 'Uso oral') + '</p>'
@@ -593,7 +629,7 @@ const DOCS = [
   /* ---------- exames ---------- */
   {
     id:'req', grupo:'Exames', tpl:'req',
-    label:'Requisição de exames — HUB', nota:'USG quadril, USTF, bilirrubinas, imagem e exames gerais',
+    label:'Requisição de exames — HUB', nota:'Modelo oficial do HUB (papelada-HUB) — USG quadril, USTF, bilirrubinas e outros',
     campos:[
       {key:'itens',tipo:'checkgroup',label:'Exames solicitados',opcoes:EXAMES_ROTINA},
       {key:'obs',tipo:'textarea',label:'Outros exames / Indicação clínica (um por linha)',ph:'Ultrassonografia de quadril para rastreamento de DDQ\nUltrassom transfontanela (USTF)'}
@@ -601,7 +637,7 @@ const DOCS = [
   },
   {
     id:'urg', grupo:'Exames', tpl:'lab',
-    label:'Laboratório de Patologia Clínica — CPA', nota:'Formulário oficial do laboratório (Bilirrubinas, hemograma, etc.)',
+    label:'Laboratório de Patologia Clínica — CPA (HUB)', nota:'Formulário oficial do laboratório HUB (Bilirrubinas, hemograma, etc.)',
     campos:[
       {key:'itens',tipo:'checkgroup',label:'Exames laboratoriais',opcoes:LAB_ALL,agrupado:true,padrao:['BIOQUÍMICA · Bilirrubina total e frações']},
       {key:'indic',tipo:'text',label:'Identificação clínica',padrao:'Icterícia neonatal a esclarecer / rastreio de alta',ph:'Icterícia neonatal'}
@@ -644,7 +680,7 @@ const DOCS = [
   },
   {
     id:'consulta', grupo:'Encaminhamentos', tpl:'cards',
-    label:'Cartão de Marcação de Consulta', nota:'Cartão oficial do ambulatório HUB — duas vias',
+    label:'Cartão de Marcação de Consulta — HUB', nota:'Cartão oficial do ambulatório HUB — duas vias',
     campos:[
       {key:'clinica',tipo:'text',label:'Clínica',padrao:'Pediatria — Crescimento e Desenvolvimento (C&D)',ph:'Pediatria — C&D'},
       {key:'dr',tipo:'text',label:'Médico(a)',ph:'Dr(a)...'},
@@ -670,10 +706,20 @@ const DOCS = [
   },
   {
     id:'parecer', grupo:'Encaminhamentos', tpl:'par', full:true,
-    label:'Solicitação de Parecer — Cirurgia Geral', nota:'Formulário oficial do HUB (folha inteira, com linhas para resposta)',
+    label:'Solicitação de Parecer — HUB (Cirurgia Geral)',
+    nota:'Formulário oficial do HUB (papelada-HUB) — folha inteira com linhas para resposta',
     campos:[
-      {key:'clinica',tipo:'text',label:'À clínica',padrao:'Cirurgia Geral',ph:'Cirurgia Geral ou Cirurgia Pediátrica'},
-      {key:'motivo',tipo:'textarea',label:'Motivo da consulta (até 5 linhas)',padrao:'RN internado na Unidade Neonatal do HUB. Solicita-se avaliação e parecer da equipe de Cirurgia Geral quanto a...'}
+      {key:'clinica',tipo:'text',label:'Para a clínica',padrao:'Cirurgia Geral',ph:'Cirurgia Geral ou Cirurgia Pediátrica'},
+      {key:'motivo',tipo:'textarea',label:'Motivo da consulta (até 5 linhas)',padrao:'RN internado na Unidade Neonatal do HUB. Solicita-se avaliação e parecer da equipe de Cirurgia Geral quanto a...',ph:'Dados sobre os quais deseja opinião e principais sintomas do paciente.'}
+    ]
+  },
+  {
+    id:'parecer_ses', grupo:'Encaminhamentos', tpl:'parses', full:true,
+    label:'Pedido de Parecer — SES-DF',
+    nota:'Formulário oficial SES-DF (papelada-HUB) — folha inteira',
+    campos:[
+      {key:'clinica',tipo:'text',label:'Para a clínica (especialidade)',padrao:'Cirurgia Geral',ph:'Ex.: Cirurgia Pediátrica, Cardiologia'},
+      {key:'motivo',tipo:'textarea',label:'Motivo da consulta',padrao:'RN internado na Unidade Neonatal do HUB. Solicita-se parecer da clínica quanto a...',ph:'Dados sobre os quais deseja opinião e principais sintomas do paciente.'}
     ]
   },
 
@@ -684,27 +730,25 @@ const DOCS = [
     nota:'Folheto completo — amamentação, banho, coto umbilical, sono seguro',
     titulo:'Orientações de Alta do Recém-Nascido', semAssinatura:true,
     body(){
-      return '<div class="cols2">'
+      return '<div class="cols2 compact">'
         + '<p><b>1. Aleitamento materno exclusivo</b></p><ul>'
-        + '<li>O leite materno é o alimento completo e ideal. Ofereça em livre demanda (sempre que o bebê demonstrar sinais de fome).</li>'
-        + '<li>Não é necessário dar água, chás ou outros leites nos primeiros 6 meses de vida.</li>'
-        + '<li>Para evitar dor e fissuras nos mamilos, garanta a pega correta: boca bem aberta, lábios para fora e queixo encostado na mama.</li></ul>'
+        + '<li>Leite materno sob livre demanda (sempre que demonstrar fome). Não ofertar água, chás ou outros leites.</li>'
+        + '<li>Garantir pega correta: boca bem aberta, lábios evertidos e queixo encostado na mama para evitar dor e fissuras.</li></ul>'
         + '<p><b>2. Cuidados com o coto umbilical</b></p><ul>'
-        + '<li>Limpar a base do coto umbilical a cada troca de fralda com álcool a 70% e algodão ou gaze limpa.</li>'
-        + '<li>Manter o coto sempre limpo e seco. Deixar a fralda dobrada abaixo do coto.</li>'
-        + '<li>O coto costuma cair naturalmente entre 7 e 15 dias. Não colocar faixas, moedas ou pomadas.</li></ul>'
-        + '<p><b>3. Banho e higiene</b></p><ul>'
+        + '<li>Limpar a base a cada troca de fralda com álcool a 70% e algodão/gaze limpa. Manter limpo e seco.</li>'
+        + '<li>Deixar a fralda abaixo do coto. Costuma cair entre 7 e 15 dias. Não colocar faixas ou moedas.</li></ul>'
+        + '<p><b>3. Banho e higiene do bebê</b></p><ul>'
         + '<li>Banho diário em água morna e ambiente sem correntes de ar. Usar sabonete neutro infantil.</li>'
-        + '<li>Secar suavemente todas as dobras para evitar assaduras. Limpar a área da fralda com água morna e algodão.</li></ul>'
+        + '<li>Secar suavemente todas as dobras para evitar assaduras. Limpar área da fralda com água morna e algodão.</li></ul>'
         + '<p><b>4. Sono seguro</b></p><ul>'
-        + '<li>O bebê deve dormir <b>sempre de barriga para cima</b> (decúbito dorsal) em colchão firme.</li>'
-        + '<li>Não use travesseiros, almofadas, protetores fofos de berço ou bichos de pelúcia onde o bebê dorme.</li></ul>'
-        + '<p><b>5. Banho de sol e vitamina D</b></p><ul>'
-        + '<li>Banho de sol: 10 a 15 minutos ao dia, antes das 10h ou após as 16h, com pernas e braços expostos.</li>'
-        + '<li>Administrar a Vitamina D profilática diariamente conforme prescrição médica.</li></ul>'
+        + '<li>Dormir <b>sempre de barriga para cima</b> (decúbito dorsal) em colchão firme.</li>'
+        + '<li>Não usar travesseiros, protetores fofos de berço ou bichos de pelúcia onde o bebê dorme.</li></ul>'
+        + '<p><b>5. Vitamina D e banho de sol</b></p><ul>'
+        + '<li>Banho de sol: 10 a 15 min/dia, antes das 10h ou após as 16h, com pernas/braços expostos.</li>'
+        + '<li>Administrar a Vitamina D (200 UI/gota, 2 gotas/dia) diariamente conforme receita médica.</li></ul>'
         + '<p><b>6. Vacinas e triagens</b></p><ul>'
         + '<li>Realizar o Teste do Pezinho entre o 3º e 5º dia de vida na UBS mais próxima.</li>'
-        + '<li>Garantir aplicação das vacinas BCG e Hepatite B da maternidade.</li></ul>'
+        + '<li>Garantir aplicação das vacinas BCG e Hepatite B administradas na maternidade.</li></ul>'
         + '</div>';
     }
   },
@@ -714,17 +758,17 @@ const DOCS = [
     nota:'Sinais de alarme no RN — febre, hipotermia, gemência, icterícia',
     titulo:'Voltar ao Pronto-Socorro Imediatamente se o Bebê Apresentar:', semAssinatura:true,
     body(){
-      return '<div class="alert"><ol>'
-        + '<li><b>Febre</b> (temperatura axilar ≥ 37,8 °C) ou <b>hipotermia</b> (temperatura ≤ 36,0 °C).</li>'
+      return '<div class="alert"><ol style="margin:0;padding-left:4.5mm;line-height:1.35">'
+        + '<li><b>Febre</b> (temperatura axilar &ge; 37,8 &deg;C) ou <b>hipotermia</b> (temperatura &le; 36,0 &deg;C).</li>'
         + '<li><b>Dificuldade para respirar:</b> respiração rápida, cansaço no peito, gemência ou afundamento das costelas.</li>'
-        + '<li><b>Icterícia acentuada:</b> pele ou olhos muito amarelados (especialmente se a cor amarela atingir a barriga, pernas ou pés).</li>'
-        + '<li><b>Dificuldade para mamar:</b> recusa persistente do peito, cansaço extremo ou sonolência excessiva durante as mamadas.</li>'
+        + '<li><b>Icterícia acentuada:</b> pele ou olhos muito amarelados (atingindo barriga, pernas ou pés).</li>'
+        + '<li><b>Dificuldade para mamar:</b> recusa persistente do peito, cansaço extremo ou sonolência excessiva.</li>'
         + '<li><b>Hipoatividade / moleza:</b> bebê muito mole, que não acorda para mamar ou tem choro fraco.</li>'
         + '<li><b>Vômitos intensos:</b> vômitos frequentes em jato ou de coloração esverdeada/amarela-escura.</li>'
-        + '<li><b>Alterações no coto umbilical:</b> vermelhidão na pele ao redor do coto, inchaço, saída de pus ou cheiro forte.</li>'
-        + '<li><b>Falta de urina ou fezes:</b> ausência de diurese (fraldas secas) por mais de 24 horas.</li>'
+        + '<li><b>Alterações no coto umbilical:</b> vermelhidão na pele ao redor, inchaço, saída de pus ou cheiro forte.</li>'
+        + '<li><b>Falta de urina:</b> ausência de diurese (fraldas secas) por mais de 24 horas.</li>'
         + '</ol></div>'
-        + '<p class="small center">Hospital Universitário de Brasília — ' + ENDERECO + '</p>';
+        + '<p class="small center" style="margin-top:2mm">Hospital Universitário de Brasília — ' + ENDERECO + '</p>';
     }
   },
   {
@@ -733,20 +777,20 @@ const DOCS = [
     nota:'Resumo do Teste do Pezinho, Olhinho, Orelhinha, Coraçãozinho e vacinas',
     titulo:'Triagens Neonatais e Calendário Vacinal do Recém-Nascido', semAssinatura:true,
     body(){
-      return '<div class="cols2">'
+      return '<div class="cols2 compact">'
         + '<p><b>1. Teste do Pezinho (Triagem Biológica)</b></p>'
-        + '<p>Deve ser colhido entre o <b>3º e 5º dia de vida</b> na Unidade Básica de Saúde (UBS). Detecta doenças genéticas e metabólicas precocemente.</p>'
+        + '<p>Coleta entre o <b>3º e 5º dia de vida</b> na UBS. Detecta precocemente doenças genéticas e metabólicas.</p>'
         + '<p><b>2. Teste do Olhinho (Reflexo Vermelho)</b></p>'
-        + '<p>Avalia a transparência dos meios oculares para afastar catarata congênita e tumores.</p>'
+        + '<p>Triagem ocular para afastar precocemente catarata congênita e tumores (retinoblastoma).</p>'
         + '<p><b>3. Teste da Orelhinha (Triagem Auditiva)</b></p>'
-        + '<p>Avalia a integridade auditiva do recém-nascido através de emissões otoacústicas.</p>'
+        + '<p>Avaliação auditiva através de emissões otoacústicas evocadas.</p>'
         + '<p><b>4. Teste do Coraçãozinho (Oximetria)</b></p>'
-        + '<p>Realizado entre 24h e 48h de vida para triagem de cardiopatias congênitas críticas.</p>'
+        + '<p>Triagem de cardiopatias congênitas críticas realizada entre 24h e 48h de vida.</p>'
         + '<p><b>5. Teste da Linguinha</b></p>'
-        + '<p>Avalia o frênulo lingual para diagnóstico de anquiloglossia (língua presa).</p>'
-        + '<p><b>6. Vacinas ao Nascer</b></p>'
-        + '<p>• <b>BCG:</b> dose única para proteção contra formas graves de tuberculose.<br>'
-        + '• <b>Hepatite B:</b> primeira dose aplicada nas primeiras 24 horas de vida.</p>'
+        + '<p>Avaliação anatômica e funcional do frênulo lingual para diagnóstico de anquiloglossia.</p>'
+        + '<p><b>6. Vacinas do Recém-Nascido</b></p>'
+        + '<p>&bull; <b>BCG:</b> dose única para proteção contra formas graves de tuberculose.<br>'
+        + '&bull; <b>Hepatite B:</b> primeira dose aplicada nas primeiras 24 horas de vida.</p>'
         + '</div>';
     }
   },
@@ -814,7 +858,7 @@ function tplRec(d, v){
     + '<img class="logo" src="' + LOGO_UH + '" alt="">'
     + '<p class="ttl">RECEITUÁRIO</p>'
     + '<div class="pac"><span><b>Paciente (RN):</b> ' + esc(state.nome || '____________________') + '</span><span><b>Registro:</b> ' + esc(state.reg || '________') + '</span></div>'
-    + '<div class="corpo d-body">' + d.body(v) + '</div>'
+    + '<div class="corpo">' + d.body(v) + '</div>'
     + '<div class="fim"><div class="dash"></div><div class="cap">' + esc(FOOT_SIGN) + '</div>'
     + '<div class="end">' + esc(br(state.data) || '____/____/______') + '<br><b>Hospital Universitário de Brasília</b><br>' + esc(ENDERECO) + '</div></div>'
     + '</div>';
@@ -861,19 +905,20 @@ function tplLab(d, v){
       + '<div class="cpa">FORMULÁRIO DE USO EXCLUSIVO DO CPA<div class="bx"><i></i><u></u></div><div class="bx"><i></i><u></u></div></div>'
       + '<div class="sig"><div class="ln"></div>Médico Solicitante (CRM/Carimbo)</div>'
     + '</div>'
-    + '<div class="proto"><span class="t">PROTOCOLO</span> &nbsp; Nº<u></u> &nbsp; NOME:<u></u> &nbsp; DATA: ___/___/___ &nbsp; HORA: ____ &nbsp; ( ) BIOQUÍMICA ( ) HEMATOLOGIA</div>'
+    + '<div class="proto"><span class="t">PROTOCOLO</span> &nbsp; Nº<u></u> &nbsp; NOME:<u></u> &nbsp; DATA: ___/___/___ &nbsp; HORA: ____ &nbsp; ( ) BIOQUÍMICA ( ) HEMATOLOGIA ( ) URINÁLISE ( ) LÍQUIDOS</div>'
     + '</div>';
 }
 
+/* Solicitação de parecer oficial HUB — fiel ao PDF de papelada-HUB */
 function tplPar(d, v){
   let linhas = ''; for(let i=0;i<21;i++) linhas += '<i></i>';
   return '<div class="t-par">'
     + '<div class="r hd"><div class="c" style="padding:2mm 3mm"><img src="' + LOGO_UE + '" alt=""></div>'
       + '<div class="c grow tt">HOSPITAL UNIVERSITÁRIO DE BRASÍLIA<br>SOLICITAÇÃO DE PARECER</div>'
       + '<div class="c" style="width:52mm"><b>REG.:</b> ' + esc(state.reg) + '</div></div>'
-    + '<div class="r"><div class="c grow"><b>NOME (RN):</b> ' + esc(state.nome) + '</div>'
+    + '<div class="r"><div class="c grow"><b>NOME:</b> ' + esc(state.nome) + '</div>'
       + '<div class="c" style="width:30mm"><b>ENF.</b> Neo</div>'
-      + '<div class="c" style="width:30mm"><b>LEITO</b> ' + esc(state.leito) + '</div></div>'
+      + '<div class="c" style="width:30mm"><b>LEITO:</b> ' + esc(state.leito) + '</div></div>'
     + '<div class="r"><div class="c grow"><b>DA CLÍNICA:</b> ' + esc(CLINICA) + '</div>'
       + '<div class="c grow"><b>A CLÍNICA:</b> ' + esc(v.clinica || 'Cirurgia Geral') + '</div></div>'
     + '<div class="motivo-l">MOTIVO DA CONSULTA: (ESPECIFICAR OS DADOS SOBRE OS QUAIS DESEJA OPINAR E ENUMERAR OS PRINCIPAIS SINTOMAS DO ENFERMO)</div>'
@@ -884,6 +929,36 @@ function tplPar(d, v){
     + '<div class="lines">' + linhas + '</div>'
     + '<div class="sg" style="border-top:.8pt solid #000"><div><div class="ln"></div>DATA</div>'
       + '<div><div class="ln"></div>CARIMBO/ASS. DO MÉDICO CONSULTANTE</div></div>'
+    + '</div>';
+}
+
+/* Pedido de parecer oficial SES-DF — fiel ao modelo SES de papelada-HUB */
+function tplParSes(d, v){
+  let linhas = ''; for(let i=0;i<21;i++) linhas += '<i></i>';
+  const inicial = (state.nome || '').trim().charAt(0).toUpperCase();
+  return '<div class="t-parses">'
+    + '<div class="hd"><img src="' + LOGO_SES + '" alt="">'
+      + '<div class="tt">GOVERNO DO DISTRITO FEDERAL<br>SECRETARIA DE ESTADO DE SAÚDE<br><b>PEDIDO DE PARECER</b></div>'
+      + '<div style="font-size:7.5pt;text-align:right"><b>SES-DF</b></div></div>'
+    + '<div class="r">'
+      + '<div class="c grow"><b>1. Unidade de Saúde:</b> Hospital Universitário de Brasília (HUB)</div>'
+      + '<div class="c" style="width:30mm"><b>2. Enf.:</b> Neo</div>'
+      + '<div class="c" style="width:30mm"><b>3. Leito:</b> ' + esc(state.leito) + '</div></div>'
+    + '<div class="r">'
+      + '<div class="c grow"><b>4. Prontuário / Reg.:</b> ' + esc(state.reg) + '</div>'
+      + '<div class="c" style="width:20mm;text-align:center"><b>5. Inic.:</b> ' + esc(inicial) + '</div>'
+      + '<div class="c" style="width:40mm"><b>6. DN:</b> ' + esc(br(state.dn)) + '</div></div>'
+    + '<div class="r"><div class="c grow"><b>7. Nome:</b> ' + esc(state.nome) + '</div></div>'
+    + '<div class="r"><div class="c grow"><b>8. Para a clínica:</b> ' + esc(v.clinica || 'Cirurgia Geral') + '</div>'
+      + '<div class="c grow"><b>Da clínica:</b> ' + esc(CLINICA) + '</div></div>'
+    + '<div class="motivo-l">9. MOTIVO DA CONSULTA: (DADOS SOBRE OS QUAIS DESEJA OPINIÃO E PRINCIPAIS SINTOMAS)</div>'
+    + '<div class="motivo">' + esc(v.motivo || '') + '</div>'
+    + '<div class="sg"><div><div class="ln"></div>10. ' + esc(br(state.data) || '____/____/______') + ' — DATA</div>'
+      + '<div><div class="ln"></div>CARIMBO E ASSINATURA DO MÉDICO SOLICITANTE</div></div>'
+    + '<div class="pl">PARECER DO MÉDICO CONSULTANTE</div>'
+    + '<div class="lines">' + linhas + '</div>'
+    + '<div class="sg" style="border-top:.8pt solid #000"><div><div class="ln"></div>DATA: ____/____/______</div>'
+      + '<div><div class="ln"></div>CARIMBO E ASSINATURA DO MÉDICO CONSULTANTE</div></div>'
     + '</div>';
 }
 
@@ -901,7 +976,7 @@ function tplCards(d, v){
   return '<div class="t-cards">' + card + card + '</div>';
 }
 
-const TPL = { band:tplBand, rec:tplRec, req:tplReq, lab:tplLab, par:tplPar, cards:tplCards };
+const TPL = { band:tplBand, rec:tplRec, req:tplReq, lab:tplLab, par:tplPar, parses:tplParSes, cards:tplCards };
 
 function docHTML(d, pagina){
   const v = state.vals[d.id] || {};
@@ -1137,6 +1212,11 @@ function render(){
 
   const folhas = []; let cur = [];
   chosen.filter(d => !d.full).forEach(d => {
+    if(d.dupSheet){
+      if(cur.length){ folhas.push(cur); cur = []; }
+      folhas.push([{doc:d}, {doc:d}]);
+      return;
+    }
     cur.push({doc:d});
     if(cur.length === 2){ folhas.push(cur); cur = []; }
   });

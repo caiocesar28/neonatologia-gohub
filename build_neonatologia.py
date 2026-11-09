@@ -1,7 +1,7 @@
 import os
 import re
 
-source_file = r"C:\Users\Caio\.gemini\antigravity\scratch\neonatologia-gohub\index.html"
+source_file = r"C:\Users\Caio\.gemini\antigravity\scratch\enfermaria-gohub\index.html"
 with open(source_file, "r", encoding="utf-8", errors="ignore") as f:
     orig = f.read()
 
