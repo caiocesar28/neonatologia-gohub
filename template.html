@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Gerador dos papéis de alta da Neonatologia — HUB-UnB/EBSERH">
+<title>Alta da Neonatologia — HUB-UnB/EBSERH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,400&display=swap">
+
+<style>
+:root{
+  --paper:#f4f6f3; --surface:#ffffff; --surface-2:#eceff0;
+  --ink:#141b18; --ink-2:#48544e; --ink-3:#7b8781;
+  --line:#d5ddd7; --line-2:#c2ccc5;
+  --accent:#006699; --accent-soft:#e2f0f8; --focus:#006699;
+  --shadow:0 1px 2px rgba(20,27,24,.06),0 8px 24px rgba(20,27,24,.07);
+  --btn-ink:#ffffff;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0b1317; --surface:#121d22; --surface-2:#19272e;
+    --ink:#e4edf2; --ink-2:#9fb0b8; --ink-3:#768891;
+    --line:#22333b; --line-2:#2e444f;
+    --accent:#3ea6d6; --accent-soft:#142d3b; --focus:#3ea6d6;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+    --btn-ink:#06151e;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0b1317; --surface:#121d22; --surface-2:#19272e;
+  --ink:#e4edf2; --ink-2:#9fb0b8; --ink-3:#768891;
+  --line:#22333b; --line-2:#2e444f;
+  --accent:#3ea6d6; --accent-soft:#142d3b; --focus:#3ea6d6;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  --btn-ink:#06151e;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
+
+.app{max-width:1440px;margin:0 auto;padding:28px 24px 80px}
+.masthead{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px}
+.masthead h1{font-family:'IBM Plex Serif',Georgia,serif;font-weight:600;font-size:27px;line-height:1.15;
+  margin:2px 0 0;letter-spacing:-.01em;text-wrap:balance}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.masthead p{margin:6px 0 0;color:var(--ink-2);font-size:13.5px;max-width:56ch}
+
+.layout{display:grid;grid-template-columns:minmax(330px,410px) 1fr;gap:28px;align-items:start}
+@media (max-width:1000px){.layout{grid-template-columns:1fr}}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow)}
+.rail{position:sticky;top:20px;max-height:calc(100vh - 40px);display:flex;flex-direction:column}
+.railscroll{overflow-y:auto;min-height:0;flex:1}
+@media (max-width:1000px){.rail{position:static;max-height:none;display:block}.railscroll{overflow:visible;max-height:none}}
+.listnote{font-size:12px;color:var(--ink-3);line-height:1.4;margin:0 0 12px}
+.jump{display:block;width:100%;text-align:left;font:inherit;font-size:12.5px;font-weight:500;margin-top:18px;
+  padding:9px 12px;border-radius:8px;cursor:pointer;background:var(--surface-2);color:var(--ink-2);border:1px dashed var(--line-2)}
+.jump:hover{color:var(--ink);border-color:var(--ink-3)}
+.panel-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.panel-head h2{margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.panel-body{padding:16px}
+
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+.field label{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.opt{font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-3)}
+input[type=text],input[type=date],input[type=number],textarea,select{
+  font:inherit;font-size:14.5px;color:var(--ink);background:var(--surface-2);
+  border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;width:100%}
+textarea{resize:vertical;min-height:60px;line-height:1.4}
+.row2{display:grid;grid-template-columns:1fr 130px;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.row2,.row3{grid-template-columns:1fr}}
+
+.qgroup{margin-top:16px}
+.qlabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.qlabel em{font-style:normal;font-size:11px;letter-spacing:0;text-transform:none;color:var(--ink-3)}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;font:inherit;font-size:13px;font-weight:500;padding:8px 6px;border-radius:8px;cursor:pointer;
+  background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line-2);text-align:center}
+.seg button:hover{border-color:var(--ink-3);color:var(--ink)}
+.seg button.on{background:var(--accent);border-color:var(--accent);color:var(--btn-ink);font-weight:600}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags button{font:inherit;font-size:12.5px;padding:6px 11px;border-radius:999px;cursor:pointer;
+  background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line-2)}
+.tags button:hover{border-color:var(--ink-3);color:var(--ink)}
+.tags button.on{background:var(--accent);border-color:var(--accent);color:var(--btn-ink);font-weight:600}
+.subfield{margin-top:8px}
+.subfield.hide{display:none}
+.more{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
+.more > summary{cursor:pointer;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);
+  font-weight:600;list-style:none;display:flex;align-items:center;gap:7px}
+.more > summary::-webkit-details-marker{display:none}
+.more > summary::before{content:'▸';font-size:11px;color:var(--ink-3)}
+.more[open] > summary::before{content:'▾'}
+
+.doc{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:var(--surface-2);transition:border-color .15s,background .15s}
+.doc:last-child{margin-bottom:0}
+.doc.on{background:var(--surface);border-color:var(--accent)}
+.doc-main{{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.doc-main input[type=checkbox]{margin-top:3px;accent-color:var(--accent);width:16px;height:16px}
+.doc-title{font-weight:600;font-size:13.5px;color:var(--ink);display:block}
+.doc-note{font-size:11.5px;color:var(--ink-3);display:block;margin-top:2px}
+.doc-fields{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:8px}
+.doc-fields.hide{display:none}
+.doc-fields label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.inline{display:flex;gap:8px;align-items:center}
+.inline span{font-size:13px;color:var(--ink-3)}
+.group-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:18px 0 8px}
+.group-label:first-child{margin-top:0}
+.tag{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:4px;
+  background:var(--accent-soft);color:var(--accent);margin-left:6px;vertical-align:1px}
+
+.actions{padding:14px 16px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;background:var(--surface)}
+.btn{background:var(--accent);color:var(--btn-ink);border:0;font:inherit;font-weight:600;font-size:14px;
+  padding:10px 20px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover:not(:disabled){filter:brightness(1.08)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.count{font-size:12.5px;color:var(--ink-3)}
+.chip{font:inherit;font-size:12px;font-weight:500;padding:5px 10px;border-radius:6px;cursor:pointer;
+  border:1px solid var(--line-2);background:transparent;color:var(--ink-2)}
+.chip:hover{color:var(--ink);border-color:var(--ink-3)}
+
+.reminder{background:var(--accent-soft);border:1px solid var(--accent);color:var(--ink);
+  padding:12px 14px;border-radius:8px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
+.reminder svg{flex-shrink:0;margin-top:2px;color:var(--accent)}
+.reminder b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px;color:var(--accent)}
+.privacy{font-size:11.5px;color:var(--ink-3);line-height:1.4;margin:14px 4px 0;display:flex;gap:6px;align-items:flex-start}
+.privacy svg{flex-shrink:0;margin-top:2px}
+
+.preview-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.preview-head h2{margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.preview-head span{font-size:12px;color:var(--ink-3)}
+#stage{display:flex;flex-direction:column;gap:24px}
+.empty{background:var(--surface);border:1px dashed var(--line-2);border-radius:10px;padding:60px 24px;
+  text-align:center;color:var(--ink-3);font-size:14px}
+
+.sheet-wrap{position:relative;background:var(--surface);box-shadow:var(--shadow);border-radius:4px;overflow:hidden}
+.sheet{width:210mm;height:297mm;background:#fff;color:#000;position:absolute;top:0;left:0;transform-origin:top left;
+  display:grid;grid-template-rows:1fr 1fr;box-sizing:border-box;font-family:'IBM Plex Sans',Arial,Helvetica,sans-serif}
+.slot{padding:9mm 12mm;box-sizing:border-box;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.slot + .slot{border-top:1px dashed #999}
+.slot.full{grid-row:1 / span 2;padding:12mm 14mm}
+
+.mono{font-family:'IBM Plex Mono',monospace}
+.switch{display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none}
+.switch input{accent-color:var(--accent);width:15px;height:15px}
+
+/* ==================== impressos ==================== */
+.d-logo{height:14mm;width:auto;object-fit:contain;margin-bottom:2mm;display:block}
+.d-id{font-size:9pt;border-top:.8pt solid #000;border-bottom:.8pt solid #000;padding:1.5mm 0;margin-bottom:3mm;
+  display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace}
+.d-id .nm{font-weight:600}
+.d-title{font-family:'IBM Plex Serif',Georgia,serif;font-size:13pt;font-weight:600;margin:0 0 2mm;text-align:center;letter-spacing:-.01em}
+.d-sub{font-size:8.5pt;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#444;margin:2mm 0 1mm}
+.d-body{font-size:9pt;line-height:1.35;flex:1;min-height:0}
+.d-body p{margin:0 0 1.5mm}
+.d-body ul,.d-body ol{margin:0 0 2mm;padding-left:4mm}
+.d-body li{margin-bottom:1mm}
+.d-foot{display:flex;justify-content:space-between;align-items:flex-end;font-size:8pt;color:#333;margin-top:auto;padding-top:2mm}
+.d-sign{display:flex;flex-direction:column;align-items:center;width:60mm;text-align:center}
+.d-sign .rule{border-top:.6pt solid #000;width:100%;margin-bottom:1mm}
+.small{font-size:7.5pt;color:#444;line-height:1.3}
+.center{text-align:center}
+.cols2{columns:2;column-gap:6mm}
+.tbl{width:100%;border-collapse:collapse;font-size:8pt;margin-top:1.5mm}
+.tbl td{padding:1.2mm 1.5mm;border-bottom:.4pt solid #ccc;vertical-align:top}
+.tbl td:first-child{font-weight:600;width:32%}
+.alert{border:1pt solid #000;border-radius:2mm;padding:2mm 3mm;margin:2mm 0;background:#fafafa}
+.alert p{margin:0}
+
+/* Receituário comum */
+.t-rec{display:flex;flex-direction:column;height:100%;font-size:9pt;line-height:1.35}
+.t-rec .logo{height:13mm;width:auto;object-fit:contain;align-self:center;margin-bottom:1.5mm}
+.t-rec .ttl{font-family:'IBM Plex Serif',Georgia,serif;font-size:12pt;font-weight:600;text-align:center;margin:0 0 2.5mm;letter-spacing:.05em}
+.t-rec .pac{display:flex;justify-content:space-between;border-top:.8pt solid #000;border-bottom:.8pt solid #000;padding:1.5mm 0;margin-bottom:3mm;font-size:9.5pt}
+.t-rec .corpo{flex:1;min-height:0}
+.t-rec .fim{margin-top:auto;display:flex;flex-direction:column;align-items:center;font-size:8pt;text-align:center}
+.t-rec .dash{border-top:.6pt dashed #000;width:65mm;margin-bottom:1mm}
+.t-rec .cap{font-size:7.5pt;color:#222;margin-bottom:1.5mm}
+.t-rec .end{font-size:7pt;color:#444;line-height:1.2}
+ol.rx{margin:0;padding-left:4mm}
+ol.rx li{margin-bottom:2.2mm}
+ol.rx .lead{display:flex;align-items:baseline}
+ol.rx .lead .nm{font-weight:600}
+ol.rx .lead .fill{flex:1;border-bottom:.4pt dotted #888;margin:0 2mm;height:1em}
+ol.rx .lead .qt{font-weight:600;white-space:nowrap}
+ol.rx .pos{margin-top:.5mm}
+
+/* Requisição de exames oficial HUB */
+.t-req{border:.8pt solid #000;display:flex;flex-direction:column;height:100%;font-size:8.5pt;line-height:1.25}
+.t-req .hd{display:flex;align-items:center;gap:3mm;padding:2mm 3mm;border-bottom:.8pt solid #000}}
+.t-req .hd img{height:11mm;width:auto}
+.t-req .hd .mec{font-size:7.5pt;line-height:1.1;border-right:.6pt solid #000;padding-right:3mm}
+.t-req .hd b{font-size:10pt;letter-spacing:.02em}
+.t-req .band{background:#e6e6e6;border-bottom:.8pt solid #000;text-align:center;font-weight:700;font-size:10pt;padding:1.2mm 0;letter-spacing:.08em}
+.t-req .r{display:flex;border-bottom:.8pt solid #000}
+.t-req .c{padding:1.2mm 2.5mm;border-right:.8pt solid #000}
+.t-req .c:last-child{border-right:0}
+.t-req .c.grow{flex:1}
+.t-req .c .val{font-family:'IBM Plex Mono',monospace;font-weight:600}
+.t-req .nat{flex:1;min-height:0;padding:2mm 3mm;font-size:8.5pt}
+.t-req .nat ol{margin:0;padding-left:4mm}
+.t-req .nat li{margin-bottom:1mm}
+.t-req .sg{display:flex;border-top:.8pt solid #000}
+.t-req .sg > div{flex:1;padding:2mm 3mm;text-align:center;font-size:7.5pt;border-right:.8pt solid #000}
+.t-req .sg > div:last-child{border-right:0}
+.t-req .sg .ln{border-top:.6pt solid #000;margin:6mm 4mm 1mm}
+.t-req .ft{background:#f4f4f4;border-top:.8pt solid #000;font-size:6.5pt;text-align:center;padding:1mm 2mm;color:#333}
+
+/* Laboratório de patologia clínica CPA */
+.t-lab{border:.8pt solid #000;height:100%;display:flex;flex-direction:column;font-size:7pt;line-height:1.15;font-family:Arial,sans-serif}
+.t-lab .main{flex:1;padding:1.5mm 2mm;display:flex;flex-direction:column}
+.t-lab .hd{display:flex;align-items:center;gap:2mm;margin-bottom:1mm}
+.t-lab .hd img{height:7.5mm;width:auto}
+.t-lab .hd .mec{font-size:6.5pt;line-height:1}
+.t-lab .cab{border-top:.6pt solid #000;border-bottom:.6pt solid #000;padding:.8mm 0;margin-bottom:1mm;font-weight:700;display:flex;justify-content:space-between;font-size:7.5pt}
+.t-lab .cab .ctrl{font-weight:400;font-size:6.5pt}
+.t-lab .cab .ctrl u{display:inline-block;width:22mm;border-bottom:.6pt solid #000;margin-left:1mm}
+.t-lab table.id{width:100%;border-collapse:collapse;margin-bottom:1mm;font-size:6.5pt}
+.t-lab table.id td{border:.4pt solid #000;padding:.7mm 1.2mm}
+.t-lab .box{display:grid;grid-template-columns:1.05fr 1.05fr .9fr;border:.6pt solid #000;flex:1;min-height:0}
+.t-lab .box > div{padding:1mm 1.2mm;border-right:.6pt solid #000}
+.t-lab .box > div:last-child{border-right:0}
+.t-lab .box h4{margin:0 0 .8mm;font-size:6.8pt;font-weight:700;text-transform:uppercase;border-bottom:.4pt solid #000;padding-bottom:.4mm}
+.t-lab .box h4.sp{margin-top:1.5mm}
+.t-lab .ck{display:block;margin-bottom:.4mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-lab .ck i{font-style:normal;display:inline-block;width:3mm;text-align:center;font-weight:700}
+.t-lab .cpa{display:flex;border-top:.6pt solid #000;padding:1mm 0 0;margin-top:auto;font-size:6.5pt;align-items:center;gap:2mm}
+.t-lab .cpa .bx{border:.4pt solid #000;padding:1mm 2mm;display:flex;gap:1.5mm}
+.t-lab .cpa .bx i{display:inline-block;width:2.5mm;height:2.5mm;border:.4pt solid #000}
+.t-lab .cpa .bx u{display:inline-block;width:16mm;border-bottom:.4pt solid #000}
+.t-lab .sig{margin-top:1.5mm;display:flex;flex-direction:column;align-items:flex-end;font-size:6.5pt}
+.t-lab .sig .ln{border-top:.6pt solid #000;width:45mm;margin-bottom:.6mm}
+.t-lab .proto{border-top:.8pt solid #000;background:#f2f2f2;padding:1mm 2mm;font-size:6pt;display:flex;align-items:center}
+.t-lab .proto .t{font-weight:700;margin-right:2mm}
+.t-lab .proto u{display:inline-block;width:16mm;border-bottom:.4pt solid #000}
+
+/* Parecer oficial HUB */
+.t-par{border:.8pt solid #000;height:100%;display:flex;flex-direction:column;font-size:8.5pt;line-height:1.25}
+.t-par .r{display:flex;border-bottom:.8pt solid #000}
+.t-par .c{padding:1.5mm 3mm;border-right:.8pt solid #000}
+.t-par .c:last-child{border-right:0}
+.t-par .c.grow{flex:1}
+.t-par .hd img{height:11mm;width:auto}
+.t-par .hd .tt{font-weight:700;font-size:9.5pt;text-align:center;line-height:1.2}
+.t-par .motivo-l{font-size:7pt;font-weight:700;padding:1mm 3mm;background:#f2f2f2;border-bottom:.8pt solid #000}
+.t-par .motivo{padding:2mm 3mm;min-height:22mm;font-size:8.5pt;border-bottom:.8pt solid #000}
+.t-par .sg{display:flex}
+.t-par .sg > div{flex:1;padding:2mm 3mm;text-align:center;font-size:7.5pt;border-right:.8pt solid #000}
+.t-par .sg > div:last-child{border-right:0}
+.t-par .sg .ln{border-top:.6pt solid #000;margin:6mm 4mm 1mm}
+.t-par .pl{background:#e6e6e6;border-top:.8pt solid #000;border-bottom:.8pt solid #000;text-align:center;font-weight:700;font-size:9.5pt;padding:1mm 0;letter-spacing:.1em}
+.t-par .lines{flex:1;min-height:0;padding:0 3mm}
+.t-par .lines i{display:block;border-bottom:.4pt solid #ccc;height:5.5mm}
+
+/* Cartão de consulta / ambulatório */
+.t-cards{display:grid;grid-template-columns:1fr 1fr;gap:6mm;height:100%}
+.t-cards .card{border:1pt solid #000;padding:3mm 3.5mm;display:flex;flex-direction:column;font-size:8pt;line-height:1.3}
+.t-cards .card .hd{display:flex;align-items:center;gap:2mm;border-bottom:.6pt solid #000;padding-bottom:1.5mm;margin-bottom:2mm}
+.t-cards .card .hd img{height:8mm;width:auto}
+.t-cards .card .hd span{font-weight:700;font-size:9pt;letter-spacing:.08em}
+.t-cards .card .l{margin-bottom:1.5mm}
+.t-cards .card .l .v{font-weight:600;font-family:'IBM Plex Mono',monospace}
+.t-cards .card .mk{display:flex;gap:3mm;margin-top:.8mm}
+.t-cards .card .ft{margin-top:auto;border-top:.6pt solid #000;padding-top:1.5mm;font-size:7.5pt;display:flex;justify-content:space-between;font-weight:700}
+
+.freetext{white-space:pre-wrap;font-family:'IBM Plex Sans',Arial,sans-serif;font-size:9pt;line-height:1.4}
+.blank-area{min-height:45mm;border:1px dashed #ccc;border-radius:4px;margin:3mm 0}
+
+/* Impressão */
+@media print{
+  @page{size:A4 portrait;margin:0}
+  html,body{margin:0;padding:0;background:#fff}
+  .app{max-width:none;padding:0}
+  .masthead,.rail,.preview-head,.privacy,.empty,.reminder{display:none !important}
+  .layout{display:block}
+  #stage{display:block;gap:0}
+  .sheet-wrap{display:block;height:auto !important;box-shadow:none}
+  .sheet{transform:none !important;position:static !important;box-shadow:none;break-after:page;page-break-after:always}
+  .sheet-wrap:last-child .sheet{break-after:auto;page-break-after:auto}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">HUB-UnB / EBSERH &middot; Unidade Neonatal</div>
+      <h1>Alta da Neonatologia</h1>
+      <p>Preencha os dados do recém-nascido, marque os papéis e imprima. Cada documento sai no seu formulário oficial do HUB — dois por folha A4 com linha de corte.</p>
+    </div>
+    <button class="chip ghost" id="theme">Alternar tema</button>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <div class="panel rail">
+        <div class="railscroll">
+        <div class="panel-head"><h2>Recém-Nascido</h2></div>
+        <div class="panel-body">
+          <div class="field">
+            <label for="nome">Nome do RN / Mãe</label>
+            <input type="text" id="nome" autocomplete="off" placeholder="RN de Maria Silva">
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label for="reg">Registro / Prontuário</label>
+              <input type="text" id="reg" class="mono" autocomplete="off" placeholder="000000/0">
+            </div>
+            <div class="field">
+              <label for="data">Data da alta</label>
+              <input type="date" id="data" class="mono">
+            </div>
+          </div>
+          <details class="more" style="margin-top:10px;border:0;padding-top:0">
+            <summary>Dados adicionais (nascimento, leito, peso)</summary>
+            <div class="row3" style="margin-top:10px">
+              <div class="field">
+                <label for="dn">Data Nascimento</label>
+                <input type="date" id="dn" class="mono">
+              </div>
+              <div class="field">
+                <label for="leito">Leito / Berço</label>
+                <input type="text" id="leito" autocomplete="off" placeholder="Berço 03 / Acon">
+              </div>
+            </div>
+            <div class="row3" style="margin-top:6px">
+              <div class="field">
+                <label for="peso">Peso alta / nasc.</label>
+                <input type="text" id="peso" autocomplete="off" placeholder="3150 g / 3200 g">
+              </div>
+              <div class="field">
+                <label for="ig">Idade Gestacional</label>
+                <input type="text" id="ig" autocomplete="off" placeholder="39 sem + 2 d">
+              </div>
+            </div>
+          </details>
+
+          <div class="qgroup">
+            <div class="qlabel">Alimentação</div>
+            <div class="seg" id="q-alim">
+              <button data-alim="ame" class="on">Aleitamento Materno (AME)</button>
+              <button data-alim="formula">Fórmula / Misto</button>
+            </div>
+          </div>
+
+          <div class="qgroup">
+            <div class="qlabel">Retornos Programados</div>
+            <div class="tags" id="q-ret">
+              <button type="button" data-ret="ped48">Retorno 48h (Pediatria HUB)</button>
+              <button type="button" data-ret="cd">Ambulatório C&D (HUB)</button>
+              <button type="button" data-ret="baixo" class="on">UBS (Baixo Risco)</button>
+            </div>
+          </div>
+
+          <div class="qgroup">
+            <div class="qlabel">Exames Rápidos</div>
+            <div class="tags" id="q-exames">
+              <button type="button" data-ex="vitd" class="on">Vitamina D (2 gotas/dia)</button>
+              <button type="button" data-ex="bili">Bilirrubinas T+F</button>
+              <button type="button" data-ex="quadril">USG Quadril</button>
+              <button type="button" data-ex="ustf">USG Transfontanela</button>
+              <button type="button" data-ex="cir">Parecer Cirurgia Geral</button>
+            </div>
+          </div>
+
+          <div class="qgroup">
+            <div class="qlabel">Particularidades do RN <em>puxam exames e retornos</em></div>
+            <div class="tags" id="q-part"></div>
+          </div>
+
+          <div class="qgroup">
+            <div class="qlabel">Kit base <em>sempre vai na alta</em></div>
+            <div class="tags" id="q-base"></div>
+          </div>
+
+          <button type="button" class="jump" id="jump">↓ Todos os papéis do HUB — vitamina D, parecer cirurgia, USG quadril, USTF, bilirrubinas, C&D, retorno 48h…</button>
+        </div>
+
+        <div class="panel-head" style="border-top:1px solid var(--line)" id="allhead">
+          <h2>Todos os papéis</h2>
+          <span class="count" id="count">nenhum</span>
+        </div>
+        <div class="panel-body">
+          <p class="listnote">Tudo o que os botões acima ativam aparece marcado aqui. Você pode marcar ou desmarcar livremente e editar os campos dos formulários.</p>
+          <div id="list"></div>
+        </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="print">Imprimir</button>
+          <span class="count" id="sheets"></span>
+        </div>
+      </div>
+
+      <p class="privacy">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.4 8.9-8 10-4.6-1.1-8-5-8-10V6l8-4z"/></svg>
+        Os dados não são enviados a nenhum servidor. Funcionamento 100% no seu navegador.
+      </p>
+    </aside>
+
+    <main>
+      <div class="reminder">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5V5a2 2 0 012-2h13v18H6a2 2 0 01-2-2z"/><path d="M9 7h7M9 11h7"/></svg>
+        <span><b>Lembretes da alta neonatal</b>Caderneta da Criança preenchida com dados do nascimento, triagens neonatais (olhinho, orelhinha, coraçãozinho, linguinha) e vacinas BCG e Hepatite B administradas.</span>
+      </div>
+      <div class="preview-head">
+        <h2>Pré-visualização</h2>
+        <span id="hint">A4 &middot; dois documentos por folha</span>
+      </div>
+      <div id="stage"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/*__LOGO_BAND__*/
+/*__LOGO_UH__*/
+/*__LOGO_SES__*/
+/*__LOGO_UE__*/
+
+const ENDERECO = 'SGAN 605, Av. L2 Norte, Brasília (DF) - CEP: 70.840-901 / (61) 2028-5000';
+const FOOT_SIGN = 'Médico(a) Assistente — Pediatria / Neonatologia HUB-UnB';
+const CLINICA = 'Neonatologia';
+const MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function br(iso){ if(!iso) return ''; const parts=iso.split('-'); if(parts.length!==3) return iso; return parts[2]+'/'+parts[1]+'/'+parts[0]; }
+function dataExtenso(iso){
+  if(!iso) return 'Brasília, ____ / ____ / ______';
+  const [y,m,d] = iso.split('-').map(Number);
+  return 'Brasília, ' + d + ' de ' + MESES[m-1] + ' de ' + y;
+}
+
+function addDays(iso, days){
+  if(!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function idade(dn, ref){
+  if(!dn) return '';
+  const a = new Date(dn+'T00:00:00'), b = ref ? new Date(ref+'T00:00:00') : new Date();
+  const diffTime = Math.max(0, b - a);
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  if(diffDays === 0) return 'RN (< 24h)';
+  if(diffDays === 1) return '1 dia de vida';
+  if(diffDays < 30) return diffDays + ' dias de vida';
+  const m = Math.floor(diffDays / 30);
+  return m + (m === 1 ? ' mês' : ' meses');
+}
+
+function rx(items){
+  return '<ol class="rx">' + items.filter(Boolean).map(it =>
+    '<li><div class="lead"><span class="nm">' + esc(it.n) + '. ' + esc(it.nome) + '</span><span class="fill"></span><span class="qt">' + esc(it.qtd) + '</span></div>'
+    + '<div class="pos">' + esc(it.pos) + '</div>'
+    + (it.obs ? '<div style="font-size:8pt;color:#555;margin-top:.5mm"><i>' + esc(it.obs) + '</i></div>' : '') + '</li>'
+  ).join('') + '</ol>';
+}
+function ck(marc, label){ return '<span class="ck">(<i>' + (marc ? 'X' : '&nbsp;') + '</i>) ' + esc(label) + '</span>'; }
+
+/* Formulário do Laboratório de Patologia Clínica CPA */
+const LAB = {
+  'BIOQUÍMICA':['Glicose','Bilirrubina total e frações','Cálcio','Sódio','Potássio','Uréia','Creatinina','Magnésio','TGO','TGP','Proteínas totais e frações','Fosfatase alcalina','CPK','LDH'],
+  'HEMATOLOGIA':['Hemograma','VHS','Coagulograma','TAP','TIPA','Tipagem sanguínea ABO/Rh','Coombs direto'],
+  'URINA':['EAS'],
+  'LÍQUIDOS':['Citometria','Citologia','Glicose','Proteínas','Lactato']
+};
+const LAB_ALL = Object.entries(LAB).flatMap(([g,v]) => v.map(x => g + ' · ' + x));
+
+const EXAMES_ROTINA = [
+  'Ultrassonografia de quadril (rastreamento de displasia)',
+  'Ultrassonografia transfontanela (USTF)',
+  'Bilirrubinas totais e frações',
+  'Ultrassonografia de rins e vias urinárias',
+  'Ecocardiograma com Doppler',
+  'Radiografia de tórax e abdome'
+];
+
+/* Particularidades do checklist da Neonatologia */
+const PARTIC = {
+  ictericia: {
+    rot:'Icterícia neonatal',
+    label:'Icterícia neonatal a esclarecer / controle pós-fototerapia',
+    orient:'Retornar em 48 horas na Pediatria do HUB para reavaliação clínica e coleta de bilirrubinas totais e frações. Manter livre demanda de aleitamento materno.',
+    exames:['Bilirrubinas totais e frações'],
+    docs:['ret_ped48','req'],
+    lab:['BIOQUÍMICA · Bilirrubina total e frações']
+  },
+  ddq: {
+    rot:'Risco de DDQ (Quadril)',
+    label:'Fator de risco para Displasia do Desenvolvimento do Quadril (pélvico/familiar)',
+    orient:'Realizar ultrassonografia de articulações coxofemorais (quadril) entre a 4ª e 6ª semana de vida.',
+    exames:['Ultrassonografia de quadril (rastreamento de displasia)'],
+    docs:['req']
+  },
+  prematuro: {
+    rot:'Prematuridade / PIG',
+    label:'Prematuridade / Baixo peso ao nascer',
+    orient:'Seguimento no Ambulatório de Crescimento e Desenvolvimento (C&D) do HUB. Manter estímulo vigoroso da amamentação e ganho ponderal.',
+    exames:['Ultrassonografia transfontanela (USTF)','Ultrassonografia de quadril (rastreamento de displasia)'],
+    docs:['ret_cd','req']
+  },
+  sifilis: {
+    rot:'Exposição a Sífilis',
+    label:'Exposição perinatal à sífilis materna',
+    orient:'Seguimento ambulatorial com VDRL seriada aos 1, 3 e 6 meses. Comparecer ao Ambulatório do HUB.',
+    exames:['VDRL sérico infantil','Hemograma completo','Radiografia de ossos longos'],
+    docs:['req','ret_cd']
+  },
+  cirurgia: {
+    rot:'Avaliação Cirúrgica',
+    label:'Necessidade de parecer da Cirurgia Geral / Pediátrica',
+    orient:'Comparecer ao serviço de cirurgia com o pedido de parecer preenchido para avaliação.',
+    docs:['parecer']
+  }
+};
+
+const BASE = [
+  ['orientacoes','Orientações do RN'],
+  ['ps','Sinais de alarme (PS)'],
+  ['triagens','Triagens e vacinas'],
+  ['rx_vitd','Vitamina D 200 UI'],
+  ['leite','Banco de leite']
+];
+
+/* ======================= DOCUMENTOS ======================= */
+const DOCS = [
+  /* ---------- receitas ---------- */
+  {
+    id:'rx_vitd', grupo:'Receitas', tpl:'rec',
+    label:'Receita — Vitamina D', nota:'200 UI/gota — 2 gotas por dia (400 UI/dia)',
+    campos:[
+      {key:'dose',tipo:'select',label:'Apresentação',opcoes:['Vitamina D (Colecalciferol) 200 UI/gota','Vitamina D 500 UI/gota'],padrao:'Vitamina D (Colecalciferol) 200 UI/gota'},
+      {key:'gotas',tipo:'number',label:'Posologia (gotas por dia)',padrao:2,sufixo:'gotas/dia'},
+      {key:'obs',tipo:'text',label:'Observação',padrao:'Iniciar a partir do 7º dia de vida. Pingar 2 gotas por via oral, 1 vez ao dia (pela manhã).'}
+    ],
+    body(v){
+      const dose = v.dose || 'Vitamina D (Colecalciferol) 200 UI/gota';
+      const g = v.gotas || 2;
+      return '<p class="d-sub">Uso oral</p>' + rx([
+        {
+          n: 1,
+          nome: dose,
+          qtd: '01 frasco',
+          pos: 'Pingar ' + g + ' gotas por via oral, 1 vez ao dia (pela manhã).',
+          obs: v.obs || 'Uso contínuo para prevenção de raquitismo e suplementação profilática da infância.'
+        }
+      ]);
+    }
+  },
+  {
+    id:'rx_ferro', grupo:'Receitas', tpl:'rec',
+    label:'Receita — Sulfato Ferroso gotas', nota:'Suplementação profilática de ferro',
+    campos:[
+      {key:'poso',tipo:'text',label:'Posologia',padrao:'1 gota/kg/dia (máx. 15 mg de Fe elementar/dia)',ph:'1 gota/kg/dia'},
+      {key:'quando',tipo:'text',label:'Início',padrao:'Iniciar aos 3 meses de vida (em RN a termo e peso > 2500g).'}
+    ],
+    body(v){
+      return '<p class="d-sub">Uso oral</p>' + rx([
+        {
+          n: 1,
+          nome: 'Sulfato Ferroso gotas (25 mg/mL de Fe elementar - 1,25 mg/gota)',
+          qtd: '01 frasco',
+          pos: 'Administrar por via oral, uma vez ao dia: ' + esc(v.poso || '1 gota/kg/dia') + '.',
+          obs: v.quando || 'Iniciar aos 3 meses de vida e manter até os 2 anos de idade.'
+        }
+      ]);
+    }
+  },
+  {
+    id:'rx_livre', grupo:'Receitas', tpl:'rec',
+    label:'Receituário em branco', nota:'Para prescrições adicionais personalizadas',
+    campos:[
+      {key:'via',tipo:'select',label:'Via',opcoes:['Uso oral','Uso tópico','Uso retal','Uso inalatório']},
+      {key:'texto',tipo:'textarea',label:'Prescrição',ph:'1. Paracetamol gotas 200 mg/mL .......... 1 frasco\n   Dar 1 gota por kg de peso de 6/6h em caso de dor ou febre.'}
+    ],
+    body(v){
+      return '<p class="d-sub">' + esc(v.via || 'Uso oral') + '</p>'
+        + (v.texto ? '<div class="freetext">' + esc(v.texto) + '</div>' : '<div class="blank-area"></div>');
+    }
+  },
+
+  /* ---------- exames ---------- */
+  {
+    id:'req', grupo:'Exames', tpl:'req',
+    label:'Requisição de exames — HUB', nota:'USG quadril, USTF, bilirrubinas, imagem e exames gerais',
+    campos:[
+      {key:'itens',tipo:'checkgroup',label:'Exames solicitados',opcoes:EXAMES_ROTINA},
+      {key:'obs',tipo:'textarea',label:'Outros exames / Indicação clínica (um por linha)',ph:'Ultrassonografia de quadril para rastreamento de DDQ\nUltrassom transfontanela (USTF)'}
+    ]
+  },
+  {
+    id:'urg', grupo:'Exames', tpl:'lab',
+    label:'Laboratório de Patologia Clínica — CPA', nota:'Formulário oficial do laboratório (Bilirrubinas, hemograma, etc.)',
+    campos:[
+      {key:'itens',tipo:'checkgroup',label:'Exames laboratoriais',opcoes:LAB_ALL,agrupado:true,padrao:['BIOQUÍMICA · Bilirrubina total e frações']},
+      {key:'indic',tipo:'text',label:'Identificação clínica',padrao:'Icterícia neonatal a esclarecer / rastreio de alta',ph:'Icterícia neonatal'}
+    ]
+  },
+
+  /* ---------- encaminhamentos e retornos ---------- */
+  {
+    id:'ret_ped48', grupo:'Encaminhamentos', tpl:'band',
+    label:'Retorno em 48h — Pediatria HUB', nota:'Reavaliação neonatal precoce (icterícia / aleitamento / peso)',
+    titulo:'Reavaliação Neonatal em 48 Horas — Pediatria HUB',
+    campos:[
+      {key:'quando',tipo:'date',label:'Data do retorno (48h após alta)'},
+      {key:'motivo',tipo:'text',label:'Motivo da reavaliação',padrao:'Reavaliação de icterícia neonatal, padrão de sucção e ganho ponderal'}
+    ],
+    body(v){
+      const d = v.quando ? br(v.quando) : (state.data ? br(addDays(state.data, 2)) : '___/___/_____');
+      return '<p>O recém-nascido deverá comparecer à <b>Pediatria do Hospital Universitário de Brasília (HUB)</b> para reavaliação clínica:</p>'
+        + '<div class="alert"><p><b>DATA DO RETORNO: ' + esc(d) + '</b></p>'
+        + '<p><b>Local:</b> Ambulatório de Pediatria / Pronto-Socorro Pediátrico do HUB.</p>'
+        + '<p><b>Motivo:</b> ' + esc(v.motivo || 'Reavaliação de icterícia neonatal e aleitamento materno') + '.</p></div>'
+        + '<p><b>Orientações aos pais:</b> Trazer a Caderneta da Criança, resultados de exames e relatórios de internação.</p>';
+    }
+  },
+  {
+    id:'ret_cd', grupo:'Encaminhamentos', tpl:'band',
+    label:'Retorno — Ambulatório de C&D (HUB)', nota:'Ambulatório de Crescimento e Desenvolvimento Neuropsicomotor',
+    titulo:'Ambulatório de Crescimento e Desenvolvimento (C&D) — HUB',
+    campos:[
+      {key:'quando',tipo:'date',label:'Data prevista'},
+      {key:'motivo',tipo:'text',label:'Indicação clínica',padrao:'Seguimento do desenvolvimento neuropsicomotor e crescimento'}
+    ],
+    body(v){
+      return '<p>Encaminho o recém-nascido para acompanhamento especializado no <b>Ambulatório de Crescimento e Desenvolvimento (C&D) do HUB</b>.</p>'
+        + '<div class="alert"><p><b>Consulta agendada/prevista para:</b> ' + (v.quando ? esc(br(v.quando)) : '___/___/_____') + '</p>'
+        + '<p><b>Indicação:</b> ' + esc(v.motivo || 'Seguimento de puericultura especializada / C&D') + '</p>'
+        + '<p><b>Local:</b> Prédio dos Ambulatórios do HUB — Pediatria.</p></div>'
+        + '<p><b>Telefone para marcação e informações:</b> (61) 2028-5232 / 2028-5000.</p>';
+    }
+  },
+  {
+    id:'consulta', grupo:'Encaminhamentos', tpl:'cards',
+    label:'Cartão de Marcação de Consulta', nota:'Cartão oficial do ambulatório HUB — duas vias',
+    campos:[
+      {key:'clinica',tipo:'text',label:'Clínica',padrao:'Pediatria — Crescimento e Desenvolvimento (C&D)',ph:'Pediatria — C&D'},
+      {key:'dr',tipo:'text',label:'Médico(a)',ph:'Dr(a)...'},
+      {key:'dia',tipo:'text',label:'Data marcada',ph:'__/__/____'},
+      {key:'hora',tipo:'text',label:'Horário',padrao:'08:00',ph:'08:00'}
+    ]
+  },
+  {
+    id:'ret_baixo', grupo:'Encaminhamentos', tpl:'band',
+    label:'Retorno na UBS — Baixo Risco', nota:'Contrarreferência da puericultura à Unidade Básica de Saúde',
+    titulo:'Ao Centro de Saúde / UBS — Puericultura',
+    campos:[
+      {key:'ubs',tipo:'text',label:'UBS de referência',ph:'UBS 1 — Asa Norte / Região de residência'},
+      {key:'dias',tipo:'number',label:'Retorno em (dias após a alta)',padrao:7,sufixo:'dias'}
+    ],
+    body(v){
+      return '<p><b>À Equipe de Saúde da Família / UBS:</b> ' + esc(v.ubs || 'Unidade Básica de Saúde de referência') + '</p>'
+        + '<p style="margin-top:2mm"><b>Puericultura de baixo risco.</b></p>'
+        + '<p>Encaminhamos o recém-nascido com alta da Unidade Neonatal/Alojamento Conjunto do HUB para seguimento de rotina da criança (1ª consulta entre <b>' + esc(v.dias || 7) + ' a 10 dias de vida</b>).</p>'
+        + '<p><b>Alimentação na alta:</b> ' + (state.alim === 'formula' ? 'Fórmula infantil / Aleitamento misto' : 'Aleitamento materno exclusivo sob livre demanda') + '.</p>'
+        + '<p>Favor realizar pesagem, aferição do perímetro cefálico, checagem do coto umbilical e conferência das triagens neonatais.</p>';
+    }
+  },
+  {
+    id:'parecer', grupo:'Encaminhamentos', tpl:'par', full:true,
+    label:'Solicitação de Parecer — Cirurgia Geral', nota:'Formulário oficial do HUB (folha inteira, com linhas para resposta)',
+    campos:[
+      {key:'clinica',tipo:'text',label:'À clínica',padrao:'Cirurgia Geral',ph:'Cirurgia Geral ou Cirurgia Pediátrica'},
+      {key:'motivo',tipo:'textarea',label:'Motivo da consulta (até 5 linhas)',padrao:'RN internado na Unidade Neonatal do HUB. Solicita-se avaliação e parecer da equipe de Cirurgia Geral quanto a...'}
+    ]
+  },
+
+  /* ---------- orientações ---------- */
+  {
+    id:'orientacoes', grupo:'Orientações aos pais', tpl:'band',
+    label:'Orientações de alta do recém-nascido',
+    nota:'Folheto completo — amamentação, banho, coto umbilical, sono seguro',
+    titulo:'Orientações de Alta do Recém-Nascido', semAssinatura:true,
+    body(){
+      return '<div class="cols2">'
+        + '<p><b>1. Aleitamento materno exclusivo</b></p><ul>'
+        + '<li>O leite materno é o alimento completo e ideal. Ofereça em livre demanda (sempre que o bebê demonstrar sinais de fome).</li>'
+        + '<li>Não é necessário dar água, chás ou outros leites nos primeiros 6 meses de vida.</li>'
+        + '<li>Para evitar dor e fissuras nos mamilos, garanta a pega correta: boca bem aberta, lábios para fora e queixo encostado na mama.</li></ul>'
+        + '<p><b>2. Cuidados com o coto umbilical</b></p><ul>'
+        + '<li>Limpar a base do coto umbilical a cada troca de fralda com álcool a 70% e algodão ou gaze limpa.</li>'
+        + '<li>Manter o coto sempre limpo e seco. Deixar a fralda dobrada abaixo do coto.</li>'
+        + '<li>O coto costuma cair naturalmente entre 7 e 15 dias. Não colocar faixas, moedas ou pomadas.</li></ul>'
+        + '<p><b>3. Banho e higiene</b></p><ul>'
+        + '<li>Banho diário em água morna e ambiente sem correntes de ar. Usar sabonete neutro infantil.</li>'
+        + '<li>Secar suavemente todas as dobras para evitar assaduras. Limpar a área da fralda com água morna e algodão.</li></ul>'
+        + '<p><b>4. Sono seguro</b></p><ul>'
+        + '<li>O bebê deve dormir <b>sempre de barriga para cima</b> (decúbito dorsal) em colchão firme.</li>'
+        + '<li>Não use travesseiros, almofadas, protetores fofos de berço ou bichos de pelúcia onde o bebê dorme.</li></ul>'
+        + '<p><b>5. Banho de sol e vitamina D</b></p><ul>'
+        + '<li>Banho de sol: 10 a 15 minutos ao dia, antes das 10h ou após as 16h, com pernas e braços expostos.</li>'
+        + '<li>Administrar a Vitamina D profilática diariamente conforme prescrição médica.</li></ul>'
+        + '<p><b>6. Vacinas e triagens</b></p><ul>'
+        + '<li>Realizar o Teste do Pezinho entre o 3º e 5º dia de vida na UBS mais próxima.</li>'
+        + '<li>Garantir aplicação das vacinas BCG e Hepatite B da maternidade.</li></ul>'
+        + '</div>';
+    }
+  },
+  {
+    id:'ps', grupo:'Orientações aos pais', tpl:'band',
+    label:'Voltar ao Pronto-Socorro se…',
+    nota:'Sinais de alarme no RN — febre, hipotermia, gemência, icterícia',
+    titulo:'Voltar ao Pronto-Socorro Imediatamente se o Bebê Apresentar:', semAssinatura:true,
+    body(){
+      return '<div class="alert"><ol>'
+        + '<li><b>Febre</b> (temperatura axilar ≥ 37,8 °C) ou <b>hipotermia</b> (temperatura ≤ 36,0 °C).</li>'
+        + '<li><b>Dificuldade para respirar:</b> respiração rápida, cansaço no peito, gemência ou afundamento das costelas.</li>'
+        + '<li><b>Icterícia acentuada:</b> pele ou olhos muito amarelados (especialmente se a cor amarela atingir a barriga, pernas ou pés).</li>'
+        + '<li><b>Dificuldade para mamar:</b> recusa persistente do peito, cansaço extremo ou sonolência excessiva durante as mamadas.</li>'
+        + '<li><b>Hipoatividade / moleza:</b> bebê muito mole, que não acorda para mamar ou tem choro fraco.</li>'
+        + '<li><b>Vômitos intensos:</b> vômitos frequentes em jato ou de coloração esverdeada/amarela-escura.</li>'
+        + '<li><b>Alterações no coto umbilical:</b> vermelhidão na pele ao redor do coto, inchaço, saída de pus ou cheiro forte.</li>'
+        + '<li><b>Falta de urina ou fezes:</b> ausência de diurese (fraldas secas) por mais de 24 horas.</li>'
+        + '</ol></div>'
+        + '<p class="small center">Hospital Universitário de Brasília — ' + ENDERECO + '</p>';
+    }
+  },
+  {
+    id:'triagens', grupo:'Orientações aos pais', tpl:'band',
+    label:'Triagens neonatais e vacinas',
+    nota:'Resumo do Teste do Pezinho, Olhinho, Orelhinha, Coraçãozinho e vacinas',
+    titulo:'Triagens Neonatais e Calendário Vacinal do Recém-Nascido', semAssinatura:true,
+    body(){
+      return '<div class="cols2">'
+        + '<p><b>1. Teste do Pezinho (Triagem Biológica)</b></p>'
+        + '<p>Deve ser colhido entre o <b>3º e 5º dia de vida</b> na Unidade Básica de Saúde (UBS). Detecta doenças genéticas e metabólicas precocemente.</p>'
+        + '<p><b>2. Teste do Olhinho (Reflexo Vermelho)</b></p>'
+        + '<p>Avalia a transparência dos meios oculares para afastar catarata congênita e tumores.</p>'
+        + '<p><b>3. Teste da Orelhinha (Triagem Auditiva)</b></p>'
+        + '<p>Avalia a integridade auditiva do recém-nascido através de emissões otoacústicas.</p>'
+        + '<p><b>4. Teste do Coraçãozinho (Oximetria)</b></p>'
+        + '<p>Realizado entre 24h e 48h de vida para triagem de cardiopatias congênitas críticas.</p>'
+        + '<p><b>5. Teste da Linguinha</b></p>'
+        + '<p>Avalia o frênulo lingual para diagnóstico de anquiloglossia (língua presa).</p>'
+        + '<p><b>6. Vacinas ao Nascer</b></p>'
+        + '<p>• <b>BCG:</b> dose única para proteção contra formas graves de tuberculose.<br>'
+        + '• <b>Hepatite B:</b> primeira dose aplicada nas primeiras 24 horas de vida.</p>'
+        + '</div>';
+    }
+  },
+  {
+    id:'leite', grupo:'Orientações aos pais', tpl:'band',
+    label:'Bancos de leite humano — DF',
+    nota:'Endereços e telefones dos BLH e postos de coleta',
+    titulo:'Bancos de Leite Humano (BLH) e Postos de Coleta — DF',
+    semAssinatura:true, semId:true,
+    body(){
+      const blh = [
+        ['HMIB','Av. L2 Sul Q. 608 Módulo A SGAS, Asa Sul','(61) 3449-7690 · zap (61) 99168-6696'],
+        ['HRAN','SMHN Q. 101 Área Especial, 2º andar, Asa Norte','(61) 3449-4699 · zap (61) 99111-5241'],
+        ['HRC (Ceilândia)','Área Especial 01, QNM 17, Ceilândia Sul','(61) 3449-6088 · zap (61) 99135-4938'],
+        ['HRT (Taguatinga)','Setor C, Área Especial Norte 24','(61) 3449-6617 · zap (61) 99132-8846'],
+        ['HRL (Paranoá)','Área Especial Setor Hospitalar','(61) 3449-5266 · zap (61) 99153-5306'],
+        ['HUB','L2 Norte, QD 604, Asa Norte','(61) 2028-2585 / 2028-5391']
+      ];
+      const linhas = a => a.map(r => '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '<br>' + esc(r[2]) + '</td></tr>').join('');
+      return '<p class="d-sub">Bancos de Leite Humano</p><table class="tbl">' + linhas(blh) + '</table>'
+        + '<p class="small center" style="margin-top:2mm"><b>Dificuldade para amamentar ou excesso de leite? Procure o Banco de Leite do HUB. Doe leite materno.</b></p>';
+    }
+  }
+];
+
+/* ======================= ESTADO ======================= */
+const state = {
+  nome:'', reg:'', data:'', dn:'', leito:'', peso:'', ig:'',
+  alim:'ame', retorno:'baixo',
+  sel:new Set(), vals:{},
+  partic:[], base:new Set(['orientacoes','ps','triagens','rx_vitd','leite']), autoOn:new Set()
+};
+
+DOCS.forEach(d => {
+  state.vals[d.id] = {};
+  (d.campos||[]).forEach(c => { if(c.padrao !== undefined) state.vals[d.id][c.key] = c.padrao; });
+});
+
+const $ = s => document.querySelector(s);
+const listEl = $('#list'), stage = $('#stage');
+
+/* ======================= TEMPLATES ======================= */
+function idLine(){
+  let extra = [];
+  if(state.peso) extra.push('<b>PESO:</b> ' + esc(state.peso));
+  if(state.leito) extra.push('<b>LEITO:</b> ' + esc(state.leito));
+  const ex = extra.length ? ' &middot; ' + extra.join(' &middot; ') : '';
+  return '<div class="d-id"><span class="nm"><b>RN:</b> ' + esc(state.nome || '____________________') + '</span>'
+    + '<span class="rg"><b>REG:</b> ' + esc(state.reg || '________') + ex + '</span></div>';
+}
+
+function tplBand(d, v){
+  const foot = d.semAssinatura
+    ? '<div class="d-foot"><span>' + esc(dataExtenso(state.data)) + '</span><span></span></div>'
+    : '<div class="d-foot"><span>' + esc(dataExtenso(state.data)) + '</span>'
+      + '<span class="d-sign"><div class="rule"></div><small>' + esc(FOOT_SIGN) + '</small></span></div>';
+  return '<img class="d-logo" src="' + LOGO_BAND + '" alt="">'
+    + (d.semId ? '' : idLine())
+    + '<h2 class="d-title">' + esc(d.titulo) + '</h2>'
+    + '<div class="d-body">' + d.body(v) + '</div>' + foot;
+}
+
+function tplRec(d, v){
+  return '<div class="t-rec">'
+    + '<img class="logo" src="' + LOGO_UH + '" alt="">'
+    + '<p class="ttl">RECEITUÁRIO</p>'
+    + '<div class="pac"><span><b>Paciente (RN):</b> ' + esc(state.nome || '____________________') + '</span><span><b>Registro:</b> ' + esc(state.reg || '________') + '</span></div>'
+    + '<div class="corpo d-body">' + d.body(v) + '</div>'
+    + '<div class="fim"><div class="dash"></div><div class="cap">' + esc(FOOT_SIGN) + '</div>'
+    + '<div class="end">' + esc(br(state.data) || '____/____/______') + '<br><b>Hospital Universitário de Brasília</b><br>' + esc(ENDERECO) + '</div></div>'
+    + '</div>';
+}
+
+function tplReq(d, v){
+  const itens = (v.auto||[]).slice();
+  (v.itens||[]).forEach(x => { if(itens.indexOf(x) < 0) itens.push(x); });
+  if(v.obs) v.obs.split('\n').map(s=>s.trim()).filter(Boolean).forEach(s=>{ if(itens.indexOf(s) < 0) itens.push(s); });
+  const lista = itens.length ? '<ol>' + itens.map(i => '<li>' + esc(i) + '</li>').join('') + '</ol>' : '';
+  return '<div class="t-req">'
+    + '<div class="hd"><img src="' + LOGO_UE + '" alt=""><div class="mec">Ministério da<br><b>Educação</b></div>'
+      + '<b>HOSPITAL UNIVERSITÁRIO DE BRASÍLIA</b></div>'
+    + '<div class="band">REQUISIÇÃO DE EXAMES</div>'
+    + '<div class="r"><div class="c grow"><b>IDENTIFICAÇÃO (RN):</b> <span class="val">' + esc(state.nome) + '</span></div>'
+      + '<div class="c" style="width:40mm"><b>DN:</b> <span class="val">' + esc(br(state.dn)) + '</span></div>'
+      + '<div class="c" style="width:46mm"><b>N.º DO PRONTUÁRIO:</b> <span class="val">' + esc(state.reg) + '</span></div></div>'
+    + '<div class="r"><div class="c grow"><b>REQUISITANTE:</b></div>'
+      + '<div class="c" style="width:40mm"><b>CLÍNICA:</b> <span class="val">' + esc(CLINICA) + '</span></div>'
+      + '<div class="c" style="width:26mm"><b>ENF./LEITO:</b> <span class="val">' + esc(state.leito) + '</span></div></div>'
+    + '<div class="r"><div class="c grow"><b>NATUREZA DO EXAME:</b></div></div>'
+    + '<div class="nat">' + lista + '</div>'
+    + '<div class="sg"><div><div class="ln"></div>' + esc(br(state.data) || '____/____/______') + ' — DATA</div>'
+      + '<div><div class="ln"></div>ASS. DO MÉDICO - CRM</div></div>'
+    + '<div class="ft">Hospital Universitário de Brasília (61) 2028.5000 - SGAN 605, Av. L2 Norte Brasília/ DF. CEP: 70.840-901</div>'
+    + '</div>';
+}
+
+function tplLab(d, v){
+  const marc = new Set(v.itens||[]);
+  const col = grupos => grupos.map((g,i) => '<h4' + (i?' class="sp"':'') + '>' + g + '</h4>'
+    + LAB[g].map(x => ck(marc.has(g + ' · ' + x), x)).join('')).join('');
+  return '<div class="t-lab">'
+    + '<div class="main">'
+      + '<div class="hd"><img src="' + LOGO_UE + '" alt=""><div class="mec">Ministério da<br><b>Educação</b></div></div>'
+      + '<div class="cab"><span>LABORATÓRIO DE PATOLOGIA CLÍNICA</span><span class="ctrl">CONTROLE:<u></u></span></div>'
+      + '<table class="id">'
+        + '<tr><td colspan="2"><b>NOME DO PACIENTE (RN):</b> ' + esc(state.nome) + '</td><td style="width:26mm"><b>DN:</b> ' + esc(br(state.dn)) + '</td></tr>'
+        + '<tr><td><b>Nº GAE/PRONTUÁRIO:</b> ' + esc(state.reg) + '</td><td style="width:24mm"><b>CONVÊNIO:</b> SUS</td><td><b>CLÍNICA:</b> ' + esc(CLINICA) + '</td></tr>'
+        + '<tr><td><b>LEITO:</b> ' + esc(state.leito) + '</td><td><b>IDADE:</b> ' + esc(idade(state.dn, state.data)) + '</td><td><b>DATA:</b> ' + esc(br(state.data)) + '</td></tr>'
+        + '<tr><td colspan="3"><b>IDENTIFICAÇÃO CLÍNICA:</b> ' + esc(v.indic || '') + '</td></tr>'
+      + '</table>'
+      + '<div class="box"><div>' + col(['BIOQUÍMICA']) + '</div><div>' + col(['HEMATOLOGIA','URINA']) + '</div><div>' + col(['LÍQUIDOS']) + '</div></div>'
+      + '<div class="cpa">FORMULÁRIO DE USO EXCLUSIVO DO CPA<div class="bx"><i></i><u></u></div><div class="bx"><i></i><u></u></div></div>'
+      + '<div class="sig"><div class="ln"></div>Médico Solicitante (CRM/Carimbo)</div>'
+    + '</div>'
+    + '<div class="proto"><span class="t">PROTOCOLO</span> &nbsp; Nº<u></u> &nbsp; NOME:<u></u> &nbsp; DATA: ___/___/___ &nbsp; HORA: ____ &nbsp; ( ) BIOQUÍMICA ( ) HEMATOLOGIA</div>'
+    + '</div>';
+}
+
+function tplPar(d, v){
+  let linhas = ''; for(let i=0;i<21;i++) linhas += '<i></i>';
+  return '<div class="t-par">'
+    + '<div class="r hd"><div class="c" style="padding:2mm 3mm"><img src="' + LOGO_UE + '" alt=""></div>'
+      + '<div class="c grow tt">HOSPITAL UNIVERSITÁRIO DE BRASÍLIA<br>SOLICITAÇÃO DE PARECER</div>'
+      + '<div class="c" style="width:52mm"><b>REG.:</b> ' + esc(state.reg) + '</div></div>'
+    + '<div class="r"><div class="c grow"><b>NOME (RN):</b> ' + esc(state.nome) + '</div>'
+      + '<div class="c" style="width:30mm"><b>ENF.</b> Neo</div>'
+      + '<div class="c" style="width:30mm"><b>LEITO</b> ' + esc(state.leito) + '</div></div>'
+    + '<div class="r"><div class="c grow"><b>DA CLÍNICA:</b> ' + esc(CLINICA) + '</div>'
+      + '<div class="c grow"><b>A CLÍNICA:</b> ' + esc(v.clinica || 'Cirurgia Geral') + '</div></div>'
+    + '<div class="motivo-l">MOTIVO DA CONSULTA: (ESPECIFICAR OS DADOS SOBRE OS QUAIS DESEJA OPINAR E ENUMERAR OS PRINCIPAIS SINTOMAS DO ENFERMO)</div>'
+    + '<div class="motivo">' + esc(v.motivo || '') + '</div>'
+    + '<div class="sg"><div><div class="ln"></div>' + esc(br(state.data) || '____/____/______') + ' — DATA</div>'
+      + '<div><div class="ln"></div>CARIMBO/ASS. DO MÉDICO SOLICITANTE</div></div>'
+    + '<div class="pl">PARECER</div>'
+    + '<div class="lines">' + linhas + '</div>'
+    + '<div class="sg" style="border-top:.8pt solid #000"><div><div class="ln"></div>DATA</div>'
+      + '<div><div class="ln"></div>CARIMBO/ASS. DO MÉDICO CONSULTANTE</div></div>'
+    + '</div>';
+}
+
+function tplCards(d, v){
+  const card = '<div class="card">'
+    + '<div class="hd"><img src="' + LOGO_UE + '" alt=""><span>AMBULATÓRIO</span></div>'
+    + '<div class="l">Clínica: <span class="v">' + esc(v.clinica || 'Pediatria — Crescimento e Desenvolvimento') + '</span></div>'
+    + '<div class="l">Dr.(a): <span class="v">' + esc(v.dr || '') + '</span></div>'
+    + '<div class="l">Marcada para:<div class="mk"><span>Dia <span class="v">' + esc(v.dia || '___/___/______') + '</span></span><span>às <span class="v">' + esc(v.hora || '08:00') + '</span> Horas</span></div></div>'
+    + '<div class="l">Nome (RN): <span class="v">' + esc(state.nome) + '</span></div>'
+    + '<div class="l">Matrícula/Reg: <span class="v">' + esc(state.reg) + '</span></div>'
+    + '<div class="l" style="min-height:9mm">Assinatura:</div>'
+    + '<div class="ft"><span>HUB</span><span style="flex:1;text-align:center">MARCAÇÃO DE CONSULTA</span></div>'
+    + '</div>';
+  return '<div class="t-cards">' + card + card + '</div>';
+}
+
+const TPL = { band:tplBand, rec:tplRec, req:tplReq, lab:tplLab, par:tplPar, cards:tplCards };
+
+function docHTML(d, pagina){
+  const v = state.vals[d.id] || {};
+  const inner = TPL[d.tpl](d, v, pagina);
+  if(d.full) return '<section class="slot full">' + inner + '</section>';
+  return '<section class="slot">' + inner + '</section>';
+}
+
+/* ======================= CHECKLIST UI ======================= */
+function buildList(){
+  let html = '', grupo = '';
+  DOCS.forEach(d => {
+    if(d.grupo !== grupo){ grupo = d.grupo; html += '<div class="group-label">' + esc(grupo) + '</div>'; }
+    const tag = d.paginas ? '<span class="tag">' + d.paginas + ' folhas</span>' : (d.full ? '<span class="tag">folha inteira</span>' : '');
+    html += '<div class="doc" data-doc="' + d.id + '">'
+      + '<label class="doc-main"><input type="checkbox" data-check="' + d.id + '">'
+      + '<span><span class="doc-title">' + esc(d.label) + tag + '</span>'
+      + '<span class="doc-note">' + esc(d.nota) + '</span></span></label>';
+    if(d.campos){
+      html += '<div class="doc-fields hide" data-fields="' + d.id + '">';
+      d.campos.forEach(c => {
+        const id = d.id + '_' + c.key, dk = ' data-doc="' + d.id + '" data-key="' + c.key + '"';
+        const val = c.padrao !== undefined ? ' value="' + esc(c.padrao) + '"' : '';
+        if(c.tipo === 'textarea'){
+          html += '<div><label for="' + id + '">' + c.label + '</label><textarea id="' + id + '"' + dk + ' placeholder="' + esc(c.ph||'') + '">' + esc(c.padrao||'') + '</textarea></div>';
+        } else if(c.tipo === 'number'){
+          html += '<div><label for="' + id + '">' + c.label + '</label><div class="inline"><input type="number" min="1" id="' + id + '" class="mono"' + dk + val + ' placeholder="' + esc(c.ph||'') + '"><span>' + esc(c.sufixo||'') + '</span></div></div>';
+        } else if(c.tipo === 'date'){
+          html += '<div><label for="' + id + '">' + c.label + '</label><input type="date" id="' + id + '" class="mono"' + dk + '></div>';
+        } else if(c.tipo === 'switch'){
+          html += '<div><label class="switch" style="text-transform:none;letter-spacing:0;font-weight:400;font-size:12.5px;color:var(--ink)"><input type="checkbox"' + dk + ' data-bool="1">' + c.label + '</label></div>';
+        } else if(c.tipo === 'select'){
+          html += '<div><label for="' + id + '">' + c.label + '</label><select id="' + id + '"' + dk + '>'
+            + c.opcoes.map(o => '<option value="' + esc(o) + '"' + (o === c.padrao ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select></div>';
+        } else if(c.tipo === 'checkgroup'){
+          html += '<div><label>' + c.label + '</label><div class="tags" style="margin-top:4px">';
+          c.opcoes.forEach(op => {
+            const ck = (c.padrao||[]).indexOf(op) >= 0 ? ' on' : '';
+            html += '<button type="button" class="' + ck + '" data-cg="' + d.id + '" data-cgk="' + c.key + '" data-val="' + esc(op) + '">' + esc(op) + '</button>';
+          });
+          html += '</div></div>';
+        } else {
+          html += '<div><label for="' + id + '">' + c.label + '</label><input type="text" id="' + id + '"' + dk + val + ' placeholder="' + esc(c.ph||'') + '"></div>';
+        }
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  listEl.innerHTML = html;
+}
+
+function setField(el){
+  const did = el.dataset.doc, k = el.dataset.key;
+  if(!did || !k) return;
+  state.vals[did] = state.vals[did] || {};
+  state.vals[did][k] = el.type === 'checkbox' ? el.checked : el.value;
+}
+
+listEl.addEventListener('change', e => {
+  const t = e.target;
+  if(t.dataset.check){
+    const id = t.dataset.check;
+    t.checked ? state.sel.add(id) : state.sel.delete(id);
+    listEl.querySelector('[data-doc="' + id + '"].doc').classList.toggle('on', t.checked);
+    const f = listEl.querySelector('[data-fields="' + id + '"]');
+    if(f) f.classList.toggle('hide', !t.checked);
+  } else if(t.dataset.key) setField(t);
+  render();
+});
+
+listEl.addEventListener('click', e => {
+  const b = e.target.closest('button[data-cg]');
+  if(!b) return;
+  b.classList.toggle('on');
+  const did = b.dataset.cg, k = b.dataset.cgk;
+  const vals = Array.from(listEl.querySelectorAll('button[data-cg="' + did + '"][data-cgk="' + k + '"].on')).map(x => x.dataset.val);
+  state.vals[did] = state.vals[did] || {};
+  state.vals[did][k] = vals;
+  render();
+});
+
+listEl.addEventListener('input', e => {
+  if(e.target.dataset.key && e.target.type !== 'checkbox'){
+    setField(e.target);
+    render();
+  }
+});
+
+['nome','reg','data','dn','leito','peso','ig'].forEach(k => {
+  const el = $('#' + k);
+  if(el) el.addEventListener('input', e => { state[k] = e.target.value; render(); });
+});
+
+/* ======================= CONTROLES RÁPIDOS ======================= */
+function setDoc(id, on){
+  const cb = listEl.querySelector('[data-check="' + id + '"]');
+  if(!cb) return;
+  cb.checked = on;
+  on ? state.sel.add(id) : state.sel.delete(id);
+  cb.closest('.doc').classList.toggle('on', on);
+  const f = listEl.querySelector('[data-fields="' + id + '"]');
+  if(f) f.classList.toggle('hide', !on);
+}
+
+function manage(id, on){
+  if(on){ setDoc(id, true); state.autoOn.add(id); }
+  else if(state.autoOn.has(id)){ setDoc(id, false); state.autoOn.delete(id); }
+}
+
+function buildQuick(){
+  $('#q-part').innerHTML = Object.entries(PARTIC).map(([k,P]) => '<button type="button" data-part="' + k + '">' + esc(P.rot) + '</button>').join('');
+  $('#q-base').innerHTML = BASE.map(([id,l]) => '<button type="button" data-base="' + id + '" class="on">' + esc(l) + '</button>').join('');
+}
+
+function paintQuick(){
+  document.querySelectorAll('#q-alim button').forEach(b => b.classList.toggle('on', b.dataset.alim === state.alim));
+  document.querySelectorAll('#q-ret button').forEach(b => b.classList.toggle('on', b.dataset.ret === state.retorno));
+  document.querySelectorAll('#q-part button').forEach(b => b.classList.toggle('on', state.partic.indexOf(b.dataset.part) >= 0));
+  document.querySelectorAll('#q-base button').forEach(b => b.classList.toggle('on', state.base.has(b.dataset.base)));
+}
+
+function applyQuick(){
+  // Retornos
+  setDoc('ret_ped48', state.retorno === 'ped48');
+  setDoc('ret_cd',    state.retorno === 'cd');
+  setDoc('ret_baixo', state.retorno === 'baixo');
+
+  // Particularidades
+  const ex = [];
+  const extras = new Set();
+  const labItens = new Set(state.vals.urg?.itens || []);
+
+  state.partic.forEach(k => {
+    const P = PARTIC[k]; if(!P) return;
+    (P.exames||[]).forEach(e => { if(ex.indexOf(e) < 0) ex.push(e); });
+    (P.docs||[]).forEach(d => extras.add(d));
+    (P.lab||[]).forEach(l => labItens.add(l));
+  });
+
+  state.vals.req = state.vals.req || {};
+  state.vals.req.auto = ex;
+  manage('req', ex.length > 0);
+  extras.forEach(d => manage(d, true));
+
+  if(state.partic.indexOf('ictericia') >= 0){
+    setDoc('urg', true);
+    state.vals.urg.itens = Array.from(labItens);
+  }
+
+  BASE.forEach(([id]) => setDoc(id, state.base.has(id)));
+
+  paintQuick();
+  render();
+}
+
+document.querySelector('.panel-body').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.alim){
+    state.alim = b.dataset.alim;
+    paintQuick();
+    render();
+  } else if(b.dataset.ret){
+    state.retorno = state.retorno === b.dataset.ret ? null : b.dataset.ret;
+    applyQuick();
+  } else if(b.dataset.ex){
+    const ex = b.dataset.ex;
+    if(ex === 'vitd'){
+      const on = !state.sel.has('rx_vitd');
+      setDoc('rx_vitd', on);
+      b.classList.toggle('on', on);
+    } else if(ex === 'bili'){
+      const on = !b.classList.contains('on');
+      b.classList.toggle('on', on);
+      setDoc('urg', on);
+      setDoc('req', on);
+      state.vals.req.auto = state.vals.req.auto || [];
+      const item = 'Bilirrubinas totais e frações';
+      const idx = state.vals.req.auto.indexOf(item);
+      if(on && idx < 0) state.vals.req.auto.push(item);
+      else if(!on && idx >= 0) state.vals.req.auto.splice(idx, 1);
+    } else if(ex === 'quadril'){
+      const on = !b.classList.contains('on');
+      b.classList.toggle('on', on);
+      setDoc('req', true);
+      state.vals.req.auto = state.vals.req.auto || [];
+      const item = 'Ultrassonografia de quadril (rastreamento de displasia)';
+      const idx = state.vals.req.auto.indexOf(item);
+      if(on && idx < 0) state.vals.req.auto.push(item);
+      else if(!on && idx >= 0) state.vals.req.auto.splice(idx, 1);
+    } else if(ex === 'ustf'){
+      const on = !b.classList.contains('on');
+      b.classList.toggle('on', on);
+      setDoc('req', true);
+      state.vals.req.auto = state.vals.req.auto || [];
+      const item = 'Ultrassonografia transfontanela (USTF)';
+      const idx = state.vals.req.auto.indexOf(item);
+      if(on && idx < 0) state.vals.req.auto.push(item);
+      else if(!on && idx >= 0) state.vals.req.auto.splice(idx, 1);
+    } else if(ex === 'cir'){
+      const on = !state.sel.has('parecer');
+      setDoc('parecer', on);
+      b.classList.toggle('on', on);
+    }
+    render();
+  } else if(b.dataset.part){
+    const i = state.partic.indexOf(b.dataset.part);
+    i < 0 ? state.partic.push(b.dataset.part) : state.partic.splice(i, 1);
+    applyQuick();
+  } else if(b.dataset.base){
+    state.base.has(b.dataset.base) ? state.base.delete(b.dataset.base) : state.base.add(b.dataset.base);
+    applyQuick();
+  }
+});
+
+$('#jump').addEventListener('click', () => {
+  const box = document.querySelector('.railscroll'), head = $('#allhead');
+  if(box && head && box.clientHeight < box.scrollHeight) box.scrollTo({top: head.offsetTop - box.offsetTop, behavior:'smooth'});
+  else head.scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* ======================= MONTAGEM DA FOLHA A4 ======================= */
+function render(){
+  const chosen = DOCS.filter(d => state.sel.has(d.id));
+  $('#count').textContent = chosen.length === 0 ? 'nenhum' : chosen.length + (chosen.length === 1 ? ' papel' : ' papéis');
+  $('#print').disabled = chosen.length === 0;
+
+  if(!chosen.length){
+    stage.innerHTML = '<div class="empty">Marque os documentos ao lado para ver a folha montada aqui.</div>';
+    $('#sheets').textContent = '';
+    return;
+  }
+
+  const folhas = []; let cur = [];
+  chosen.filter(d => !d.full).forEach(d => {
+    cur.push({doc:d});
+    if(cur.length === 2){ folhas.push(cur); cur = []; }
+  });
+  if(cur.length) folhas.push(cur);
+
+  chosen.filter(d => d.full).forEach(d => {
+    const n = d.paginas || 1;
+    for(let i=1;i<=n;i++) folhas.push([{doc:d, pagina:i}]);
+  });
+
+  stage.innerHTML = folhas.map(f => '<div class="sheet-wrap"><div class="sheet">'
+    + f.map(x => docHTML(x.doc, x.pagina)).join('')
+    + (f.length === 1 && !f[0].doc.full ? '<section class="slot"></section>' : '')
+    + '</div></div>').join('');
+
+  $('#sheets').textContent = folhas.length + (folhas.length === 1 ? ' folha A4' : ' folhas A4');
+  fit();
+}
+
+function fit(){
+  const wrap = stage.querySelector('.sheet-wrap');
+  if(!wrap) return;
+  const mm = 3.7795275591;
+  const k = Math.min(1, (wrap.clientWidth - 8) / (210 * mm));
+  stage.querySelectorAll('.sheet-wrap').forEach(w => {
+    const s = w.querySelector('.sheet');
+    if(s) s.style.transform = 'scale(' + k + ')';
+    w.style.height = (297 * mm * k) + 'px';
+  });
+}
+window.addEventListener('resize', fit);
+
+$('#print').addEventListener('click', () => {
+  stage.querySelectorAll('.sheet').forEach(s => s.style.transform = 'none');
+  stage.querySelectorAll('.sheet-wrap').forEach(w => w.style.height = 'auto');
+  window.print();
+  setTimeout(fit, 300);
+});
+
+$('#theme').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const dark = cur ? cur === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+});
+
+(function(){
+  const d = new Date();
+  const iso = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  $('#data').value = iso;
+  state.data = iso;
+  buildList();
+  buildQuick();
+  applyQuick();
+})();
+</script>
+</body>
+</html>
