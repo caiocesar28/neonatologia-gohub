@@ -634,7 +634,7 @@ const DOCS = [
     label:'Requisição de exames — HUB', nota:'Modelo oficial do HUB (papelada-HUB) — USG quadril, USTF, bilirrubinas e outros',
     campos:[
       {key:'itens',tipo:'checkgroup',label:'Exames solicitados',opcoes:EXAMES_ROTINA},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: P59.9'},
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P59.9',ph:'ex.: P59.9'},
       {key:'obs',tipo:'textarea',label:'Outros exames / Indicação clínica (um por linha)',ph:'Ultrassonografia de quadril para rastreamento de DDQ\nUltrassom transfontanela (USTF)'}
     ]
   },
@@ -643,7 +643,7 @@ const DOCS = [
     label:'Laboratório de Patologia Clínica — CPA (HUB)', nota:'Formulário oficial do laboratório HUB (Bilirrubinas, hemograma, etc.)',
     campos:[
       {key:'itens',tipo:'checkgroup',label:'Exames laboratoriais',opcoes:LAB_ALL,agrupado:true,padrao:['BIOQUÍMICA · Bilirrubina total e frações']},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: P59.9'},
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P59.9',ph:'ex.: P59.9'},
       {key:'indic',tipo:'text',label:'Identificação clínica',padrao:'Icterícia neonatal a esclarecer / rastreio de alta',ph:'Icterícia neonatal'}
     ]
   },
@@ -657,7 +657,7 @@ const DOCS = [
       {key:'horas',tipo:'select',label:'Retorno em',opcoes:['24 horas','48 horas','72 horas','96 horas'],padrao:'48 horas'},
       {key:'quando',tipo:'date',label:'Data do retorno'},
       {key:'motivo',tipo:'text',label:'Motivo da reavaliação',padrao:'Reavaliação de icterícia neonatal, padrão de sucção e ganho ponderal'},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: P59.9'}
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P59.9',ph:'ex.: P59.9'}
     ],
     body(v){
       const horas = v.horas || '48 horas';
@@ -677,7 +677,7 @@ const DOCS = [
     campos:[
       {key:'quando',tipo:'date',label:'Data prevista'},
       {key:'motivo',tipo:'text',label:'Indicação clínica',padrao:'Seguimento do desenvolvimento neuropsicomotor e crescimento'},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: P07.3'}
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P07.3',ph:'ex.: P07.3'}
     ],
     body(v){
       return '<p>Encaminho o recém-nascido para acompanhamento especializado no <b>Ambulatório de Crescimento e Desenvolvimento (C&D) do HUB</b>.</p>'
@@ -721,7 +721,7 @@ const DOCS = [
     campos:[
       {key:'clinica',tipo:'select',label:'Especialidade',opcoes:['Cirurgia Geral','Oftalmologia'],padrao:'Cirurgia Geral'},
       {key:'clinica_livre',tipo:'text',label:'Especialidade (livre — preencha se não estiver na lista)',ph:'ex.: Cardiologia Pediátrica'},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',ph:'ex.: Q40.0'},
+      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'Z03.89',ph:'ex.: Z03.89'},
       {key:'motivo',tipo:'textarea',label:'Motivo da consulta (até 5 linhas)',padrao:'RN internado na Unidade Neonatal do HUB. Solicita-se avaliação e parecer da equipe quanto a...',ph:'Dados sobre os quais deseja opinião e principais sintomas do paciente.'}
     ]
   },
@@ -936,6 +936,7 @@ function tplReq(d, v){
     + '<div class="r"><div class="c grow"><b>REQUISITANTE:</b></div>'
       + '<div class="c" style="width:40mm"><b>CLÍNICA:</b> <span class="val">' + esc(CLINICA) + '</span></div>'
       + '<div class="c" style="width:26mm"><b>ENF./LEITO:</b> <span class="val">' + esc(state.leito) + '</span></div></div>'
+    + '<div class="r"><div class="c grow"><b>CID:</b> <span class="val">' + esc(v.cid || '') + '</span></div></div>'
     + '<div class="r"><div class="c grow"><b>NATUREZA DO EXAME:</b></div></div>'
     + '<div class="nat">' + lista + '</div>'
     + '<div class="sg"><div><div class="ln"></div>' + esc(br(state.data) || '____/____/______') + ' — DATA</div>'
@@ -956,7 +957,7 @@ function tplLab(d, v){
         + '<tr><td colspan="2"><b>NOME DO PACIENTE (RN):</b> ' + esc(state.nome) + '</td><td style="width:26mm"><b>DN:</b> ' + esc(br(state.dn)) + '</td></tr>'
         + '<tr><td><b>Nº GAE/PRONTUÁRIO:</b> ' + esc(state.reg) + '</td><td style="width:24mm"><b>CONVÊNIO:</b> SUS</td><td><b>CLÍNICA:</b> ' + esc(CLINICA) + '</td></tr>'
         + '<tr><td><b>LEITO:</b> ' + esc(state.leito) + '</td><td><b>IDADE:</b> ' + esc(idade(state.dn, state.data)) + '</td><td><b>DATA:</b> ' + esc(br(state.data)) + '</td></tr>'
-        + '<tr><td colspan="3"><b>IDENTIFICAÇÃO CLÍNICA:</b> ' + esc(v.indic || '') + '</td></tr>'
+        + '<tr><td colspan="2"><b>IDENTIFICAÇÃO CLÍNICA:</b> ' + esc(v.indic || '') + '</td><td><b>CID:</b> ' + esc(v.cid || '') + '</td></tr>'
       + '</table>'
       + '<div class="box"><div>' + col(['BIOQUÍMICA']) + '</div><div>' + col(['HEMATOLOGIA','URINA']) + '</div><div>' + col(['LÍQUIDOS']) + '</div></div>'
       + '<div class="cpa">FORMULÁRIO DE USO EXCLUSIVO DO CPA<div class="bx"><i></i><u></u></div><div class="bx"><i></i><u></u></div></div>'
@@ -1205,6 +1206,13 @@ document.querySelector('.panel-body').addEventListener('click', e => {
     applyQuick();
   } else if(b.dataset.ex){
     const ex = b.dataset.ex;
+    // Helper: preenche CID no estado e no campo visível (sempre ao ativar o botão)
+    function autoCid(docId, cid){
+      state.vals[docId] = state.vals[docId] || {};
+      state.vals[docId].cid = cid;
+      const el = listEl.querySelector('[data-doc="' + docId + '"][data-key="cid"]');
+      if(el) el.value = cid;
+    }
     if(ex === 'vitd'){
       const on = !state.sel.has('rx_vitd');
       setDoc('rx_vitd', on);
@@ -1219,6 +1227,7 @@ document.querySelector('.panel-body').addEventListener('click', e => {
       const idx = state.vals.req.auto.indexOf(item);
       if(on && idx < 0) state.vals.req.auto.push(item);
       else if(!on && idx >= 0) state.vals.req.auto.splice(idx, 1);
+      if(on){ autoCid('urg','P59.9'); autoCid('req','P59.9'); }
     } else if(ex === 'quadril'){
       const on = !b.classList.contains('on');
       b.classList.toggle('on', on);
@@ -1228,6 +1237,7 @@ document.querySelector('.panel-body').addEventListener('click', e => {
       const idx = state.vals.req.auto.indexOf(item);
       if(on && idx < 0) state.vals.req.auto.push(item);
       else if(!on && idx >= 0) state.vals.req.auto.splice(idx, 1);
+      if(on) autoCid('req','Q65.9');
     } else if(ex === 'ustf'){
       const on = !b.classList.contains('on');
       b.classList.toggle('on', on);
@@ -1237,10 +1247,12 @@ document.querySelector('.panel-body').addEventListener('click', e => {
       const idx = state.vals.req.auto.indexOf(item);
       if(on && idx < 0) state.vals.req.auto.push(item);
       else if(!on && idx >= 0) state.vals.req.auto.splice(idx, 1);
+      if(on) autoCid('req','P91.9');
     } else if(ex === 'cir'){
       const on = !state.sel.has('parecer');
       setDoc('parecer', on);
       b.classList.toggle('on', on);
+      if(on) autoCid('parecer','Z03.89');
     }
     render();
   } else if(b.dataset.part){
