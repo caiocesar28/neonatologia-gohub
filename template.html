@@ -48,7 +48,7 @@ body{margin:0;background:var(--paper);color:var(--ink);
   border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px}
 .masthead h1{font-family:'IBM Plex Serif',Georgia,serif;font-weight:600;font-size:27px;line-height:1.15;
   margin:2px 0 0;letter-spacing:-.01em;text-wrap:balance}
-.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
 .masthead p{margin:6px 0 0;color:var(--ink-2);font-size:13.5px;max-width:56ch}
 
 .layout{display:grid;grid-template-columns:minmax(330px,410px) 1fr;gap:28px;align-items:start}
@@ -68,7 +68,7 @@ body{margin:0;background:var(--paper);color:var(--ink);
 
 .field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
 .field:last-child{margin-bottom:0}
-.field label{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.field label{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .opt{font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-3)}
 input[type=text],input[type=date],input[type=number],textarea,select{
   font:inherit;font-size:14.5px;color:var(--ink);background:var(--surface-2);
@@ -79,8 +79,8 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 @media (max-width:420px){.row2,.row3{grid-template-columns:1fr}}
 
 .qgroup{margin-top:16px}
-.qlabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.qlabel em{font-style:normal;font-size:11px;letter-spacing:0;text-transform:none;color:var(--ink-3)}
+.qlabel{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.qlabel em{font-style:normal;font-size:12px;letter-spacing:0;text-transform:none;color:var(--ink-3)}
 .seg{display:flex;gap:6px}
 .seg button{flex:1;font:inherit;font-size:13px;font-weight:500;padding:8px 6px;border-radius:8px;cursor:pointer;
   background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line-2);text-align:center}
@@ -94,10 +94,10 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 .subfield{margin-top:8px}
 .subfield.hide{display:none}
 .more{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
-.more > summary{cursor:pointer;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);
+.more > summary{cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);
   font-weight:600;list-style:none;display:flex;align-items:center;gap:7px}
 .more > summary::-webkit-details-marker{display:none}
-.more > summary::before{content:'▸';font-size:11px;color:var(--ink-3)}
+.more > summary::before{content:'▸';font-size:12px;color:var(--ink-3)}
 .more[open] > summary::before{content:'▾'}
 
 .doc{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:var(--surface-2);transition:border-color .15s,background .15s}
@@ -106,17 +106,26 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 .doc-main{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
 .doc-main input[type=checkbox]{margin-top:3px;accent-color:var(--accent);width:16px;height:16px}
 .doc-title{font-weight:600;font-size:13.5px;color:var(--ink);display:block}
-.doc-note{font-size:11.5px;color:var(--ink-3);display:block;margin-top:2px}
+.doc-note{font-size:12.5px;color:var(--ink-3);display:block;margin-top:2px}
 .doc-fields{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:8px}
 .doc-fields.hide{display:none}
+.sec{border-top:1px solid var(--line);margin-top:8px}
+.sec-sum{cursor:pointer;list-style:none;padding:14px 18px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.sec-sum::-webkit-details-marker{display:none}
+.sec-sum::after{content:'▾';float:right;color:var(--ink-3)}
+.sec[open] > .sec-sum::after{content:'▴'}
+.sec-body{padding:0 18px 18px}
+.hint{display:block;font-size:12px;color:var(--ink-3);margin-top:4px}
+.faltas{font-size:12px;font-weight:600;color:var(--ink-2)}
+.credit{text-align:center;font-size:12px;color:var(--ink-2);margin:28px 0 8px}
 .notas-box{display:flex;flex-direction:column;gap:8px}
 .nota-nome{display:block;font-size:12.5px;color:var(--ink);margin-bottom:3px}
-.doc-fields label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.doc-fields label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .inline{display:flex;gap:8px;align-items:center}
 .inline span{font-size:13px;color:var(--ink-3)}
-.group-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:18px 0 8px}
+.group-label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:18px 0 8px}
 .group-label:first-child{margin-top:0}
-.tag{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:4px;
+.tag{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:4px;
   background:var(--accent-soft);color:var(--accent);margin-left:6px;vertical-align:1px}
 
 .actions{padding:14px 16px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;background:var(--surface)}
@@ -132,8 +141,8 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 .reminder{background:var(--accent-soft);border:1px solid var(--accent);color:var(--ink);
   padding:12px 14px;border-radius:8px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
 .reminder svg{flex-shrink:0;margin-top:2px;color:var(--accent)}
-.reminder b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px;color:var(--accent)}
-.privacy{font-size:11.5px;color:var(--ink-3);line-height:1.4;margin:14px 4px 0;display:flex;gap:6px;align-items:flex-start}
+.reminder b{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px;color:var(--accent)}
+.privacy{font-size:12.5px;color:var(--ink-3);line-height:1.4;margin:14px 4px 0;display:flex;gap:6px;align-items:flex-start}
 .privacy svg{flex-shrink:0;margin-top:2px}
 
 .preview-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
@@ -356,6 +365,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
             <div class="field">
               <label for="data">Data da alta</label>
               <input type="date" id="data" class="mono">
+              <span class="hint">Vem com a data de hoje. Pode alterar.</span>
             </div>
           </div>
           <div class="row3">
@@ -369,6 +379,9 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
             </div>
           </div>
 
+          <details class="sec" open>
+          <summary class="sec-sum">Condições e controles rápidos</summary>
+          <div class="sec-body">
           <!-- Controles rápidos da neonatologia -->
           <div class="qgroup">
             <div class="qlabel">Alimentação na alta</div>
@@ -407,17 +420,19 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
             <div class="qlabel">Pacote de rotina da alta</div>
             <div class="tags" id="q-base"></div>
           </div>
+          </div>
+          </details>
 
           <button type="button" class="jump" id="jump">Ver e editar todos os documentos &darr;</button>
         </div>
 
-        <div class="panel-head" id="allhead" style="border-top:1px solid var(--line);margin-top:8px">
-          <h2>Todos os documentos</h2>
-        </div>
-        <div class="panel-body">
-          <p class="listnote">Marque para incluir no PDF. Clique na setinha de cada um para personalizar doses, datas e textos.</p>
+        <details class="sec" id="allhead" open>
+          <summary class="sec-sum">Todos os documentos</summary>
+          <div class="sec-body">
+          <p class="listnote">Os botões rápidos acima marcam estes mesmos documentos. Marque aqui para incluir no PDF; clique na setinha para personalizar doses, datas e textos.</p>
           <div id="list"></div>
-        </div>
+          </div>
+        </details>
         </div>
 
         <div class="actions">
@@ -427,14 +442,15 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
           </button>
           <span class="count" id="count">nenhum papel</span>
           <span class="count" id="sheets"></span>
+          <span class="faltas" id="faltas"></span>
+          <button type="button" class="chip ghost" id="limpar">Limpar rascunho</button>
         </div>
       </div>
 
       <p class="privacy">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.4 8.9-8 10-4.6-1.1-8-5-8-10V6l8-4z"/></svg>
-        Os dados não são enviados a nenhum servidor. Funcionamento 100% no seu navegador.
+        Os dados não são enviados a nenhum servidor. Funcionamento 100% no seu navegador. O rascunho fica salvo só neste navegador.
       </p>
-      <p class="privacy" style="margin-top:4px;opacity:.6">Feito por Caio César, Letícia Brandão e Malu &middot; Turma 114</p>
     </aside>
 
     <main>
@@ -451,6 +467,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
   </div>
 </div>
 
+<footer class="credit">Feito por Caio César, Letícia Brandão e Malu &middot; Turma 114</footer>
 <script>
 /*__LOGO_BAND__*/
 /*__LOGO_UH__*/
@@ -585,7 +602,7 @@ function reqCampos(){
     {key:'itens',tipo:'checkgroup',label:'Exames solicitados',opcoes:EXAMES_ROTINA},
     {key:'obs',tipo:'textarea',label:'Exames digitados à mão (um por linha)',ph:'Ultrassonografia de quadril para rastreamento de DDQ\nUltrassom transfontanela (USTF)'},
     {key:'notas',tipo:'notas'},
-    {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P59.9',ph:'ex.: P59.9'}
+    {key:'cid',tipo:'text',label:'CID',padrao:'P59.9',ph:'ex.: P59.9'}
   ];
 }
 
@@ -667,7 +684,7 @@ const DOCS = [
     label:'Laboratório de Patologia Clínica — CPA (HUB)', nota:'Formulário oficial do laboratório HUB (Bilirrubinas, hemograma, etc.)',
     campos:[
       {key:'itens',tipo:'checkgroup',label:'Exames laboratoriais',opcoes:LAB_ALL,agrupado:true,padrao:['BIOQUÍMICA · Bilirrubina total e frações']},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P59.9',ph:'ex.: P59.9'},
+      {key:'cid',tipo:'text',label:'CID',padrao:'P59.9',ph:'ex.: P59.9'},
       {key:'indic',tipo:'text',label:'Identificação clínica',padrao:'Icterícia neonatal a esclarecer / rastreio de alta',ph:'Icterícia neonatal'}
     ]
   },
@@ -681,7 +698,7 @@ const DOCS = [
       {key:'horas',tipo:'select',label:'Retorno em',opcoes:['24 horas','48 horas','72 horas','96 horas'],padrao:'48 horas'},
       {key:'quando',tipo:'date',label:'Data do retorno'},
       {key:'motivo',tipo:'text',label:'Motivo da reavaliação',padrao:'Reavaliação de icterícia neonatal, padrão de sucção e ganho ponderal'},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P59.9',ph:'ex.: P59.9'}
+      {key:'cid',tipo:'text',label:'CID',padrao:'P59.9',ph:'ex.: P59.9'}
     ],
     body(v){
       const horas = v.horas || '48 horas';
@@ -701,7 +718,7 @@ const DOCS = [
     campos:[
       {key:'quando',tipo:'date',label:'Data prevista'},
       {key:'motivo',tipo:'text',label:'Indicação clínica',padrao:'Seguimento do desenvolvimento neuropsicomotor e crescimento'},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P07.3',ph:'ex.: P07.3'}
+      {key:'cid',tipo:'text',label:'CID',padrao:'P07.3',ph:'ex.: P07.3'}
     ],
     body(v){
       return '<p>Encaminho o recém-nascido para acompanhamento especializado no <b>Ambulatório de Crescimento e Desenvolvimento (C&D) do HUB</b>.</p>'
@@ -745,7 +762,7 @@ const DOCS = [
     campos:[
       {key:'clinica',tipo:'select',label:'Especialidade',opcoes:['Cirurgia Geral','Oftalmologia'],padrao:'Cirurgia Geral'},
       {key:'clinica_livre',tipo:'text',label:'Especialidade (livre — preencha se não estiver na lista)',ph:'ex.: Cardiologia Pediátrica'},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'Z03.89',ph:'ex.: Z03.89'},
+      {key:'cid',tipo:'text',label:'CID',padrao:'Z03.89',ph:'ex.: Z03.89'},
       {key:'motivo',tipo:'textarea',label:'Motivo da consulta (até 5 linhas)',padrao:'RN internado na Unidade Neonatal do HUB. Solicita-se avaliação e parecer da equipe quanto a...',ph:'Dados sobre os quais deseja opinião e principais sintomas do paciente.'}
     ]
   },
@@ -1332,9 +1349,75 @@ $('#jump').addEventListener('click', () => {
   else head.scrollIntoView({behavior:'smooth', block:'start'});
 });
 
+/* ======================= ACESSIBILIDADE E CONFERÊNCIA ======================= */
+function syncPressed(){
+  document.querySelectorAll('[data-alim],[data-ret],[data-part],[data-base],[data-ex],[data-cg]').forEach(b => {
+    b.setAttribute('aria-pressed', b.classList.contains('on') ? 'true' : 'false');
+  });
+}
+
+function atualizarFaltas(){
+  const falt = [];
+  if(!(state.nome || '').trim()) falt.push('nome do RN');
+  if(!(state.reg || '').trim()) falt.push('registro');
+  if(!state.data) falt.push('data da alta');
+  $('#faltas').textContent = state.sel.size && falt.length ? 'Falta preencher: ' + falt.join(', ') + '.' : '';
+}
+
+/* ======================= RASCUNHO (só neste navegador) ======================= */
+const KEY_RASCUNHO = 'alta-neonatologia-rascunho-v1';
+
+function salvarRascunho(){
+  try{
+    localStorage.setItem(KEY_RASCUNHO, JSON.stringify({
+      nome: state.nome, reg: state.reg, dn: state.dn, leito: state.leito,
+      alim: state.alim, retornos: [...state.retornos], retorno: state.retorno,
+      partic: state.partic, base: [...state.base], sel: [...state.sel], autoOn: [...state.autoOn],
+      vals: state.vals
+    }));
+  }catch(e){}
+}
+
+function carregarRascunho(){
+  let d = null;
+  try{ d = JSON.parse(localStorage.getItem(KEY_RASCUNHO) || 'null'); }catch(e){ d = null; }
+  if(!d) return;
+  // A data da alta não é restaurada: sempre começa com a data de hoje.
+  ['nome','reg','dn','leito'].forEach(k => {
+    if(typeof d[k] === 'string'){ state[k] = d[k]; $('#' + k).value = d[k]; }
+  });
+  state.alim = d.alim || 'ame';
+  state.retornos = new Set(d.retornos || ['baixo']);
+  state.retorno = d.retorno || null;
+  state.partic = d.partic || [];
+  state.base = new Set(d.base || ['orientacoes','ps','triagens','vacinas','rx_vitd','leite']);
+  state.autoOn = new Set(d.autoOn || []);
+  Object.entries(d.vals || {}).forEach(([id, vals]) => {
+    state.vals[id] = Object.assign(state.vals[id] || {}, vals);
+    Object.entries(vals).forEach(([k, val]) => {
+      const el = listEl.querySelector('[data-doc="' + id + '"][data-key="' + k + '"]');
+      if(el && el.type === 'checkbox') el.checked = !!val;
+      else if(el) el.value = val;
+      if(Array.isArray(val) && !el){
+        listEl.querySelectorAll('button[data-cg="' + id + '"][data-cgk="' + k + '"]').forEach(b => b.classList.toggle('on', val.indexOf(b.dataset.val) >= 0));
+      }
+    });
+  });
+  (d.sel || []).forEach(id => setDoc(id, true));
+}
+
+$('#limpar').addEventListener('click', () => {
+  if(!confirm('Apagar os dados preenchidos neste navegador e começar um novo rascunho?')) return;
+  try{ localStorage.removeItem(KEY_RASCUNHO); }catch(e){}
+  location.reload();
+});
+
 /* ======================= MONTAGEM DA FOLHA A4 ======================= */
 function render(){
   paintNotas();
+  syncPressed();
+  atualizarFaltas();
+  salvarRascunho();
   const chosen = DOCS.filter(d => state.sel.has(d.id));
   $('#count').textContent = chosen.length === 0 ? 'nenhum' : chosen.length + (chosen.length === 1 ? ' papel' : ' papéis');
   $('#print').disabled = chosen.length === 0;
@@ -1404,6 +1487,7 @@ $('#theme').addEventListener('click', () => {
   state.data = iso;
   buildList();
   buildQuick();
+  carregarRascunho();
   applyQuick();
 })();
 </script>
