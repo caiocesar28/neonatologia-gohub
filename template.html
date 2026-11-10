@@ -109,6 +109,8 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 .doc-note{font-size:11.5px;color:var(--ink-3);display:block;margin-top:2px}
 .doc-fields{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:8px}
 .doc-fields.hide{display:none}
+.notas-box{display:flex;flex-direction:column;gap:8px}
+.nota-nome{display:block;font-size:12.5px;color:var(--ink);margin-bottom:3px}
 .doc-fields label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .inline{display:flex;gap:8px;align-items:center}
 .inline span{font-size:13px;color:var(--ink-3)}
@@ -228,6 +230,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 .t-req .nat{flex:1;padding:1.5mm 3mm;font-size:8.6pt;min-height:0;overflow:hidden}
 .t-req .nat ol{margin:1mm 0 0;padding-left:5mm}
 .t-req .nat li{margin-bottom:1.2mm}
+.t-req .nat .nota-sub{margin-top:2.5mm;font-size:7.8pt;white-space:pre-line;line-height:1.3}
 .t-req .sg{display:flex;justify-content:space-between;gap:8mm;padding:0 5mm 1.5mm;font-size:7.5pt;text-align:center}
 .t-req .sg > div{min-width:48mm}
 .t-req .sg .ln{border-top:.5pt solid #000;margin-bottom:.5mm}
@@ -530,6 +533,14 @@ const PARTIC = {
     exames:['Ultrassonografia de quadril (rastreamento de displasia)'],
     docs:['req']
   },
+  pelvico: {
+    rot:'RN pélvico',
+    label:'Apresentação pélvica — USG de quadril',
+    orient:'Realizar ultrassonografia de quadril entre a 4ª e 6ª semana de vida (apresentação pélvica).',
+    exames:['Ultrassonografia de quadril (rastreamento de displasia)'],
+    docs:['req'],
+    notas:{'Ultrassonografia de quadril (rastreamento de displasia)':'RN pélvico'}
+  },
   prematuro: {
     rot:'Prematuridade / PIG',
     label:'Prematuridade / Baixo peso ao nascer',
@@ -561,6 +572,23 @@ const BASE = [
   ['leite','Banco de leite']
 ];
 
+function ferroPos(v){
+  const kg = parseFloat(String(v.peso || '').replace(',', '.'));
+  if(!(kg > 0)) return 'Administrar por via oral, uma vez ao dia: ___ gotas (1 gota/kg/dia; máx. 15 mg de Fe elementar/dia).';
+  const gotas = Math.min(12, Math.max(1, Math.round(kg)));
+  const mg = (gotas * 1.25).toFixed(2).replace('.', ',');
+  return 'Administrar por via oral, uma vez ao dia: ' + gotas + (gotas === 1 ? ' gota' : ' gotas') + ' (' + mg + ' mg de Fe elementar).';
+}
+
+function reqCampos(){
+  return [
+    {key:'itens',tipo:'checkgroup',label:'Exames solicitados',opcoes:EXAMES_ROTINA},
+    {key:'obs',tipo:'textarea',label:'Exames digitados à mão (um por linha)',ph:'Ultrassonografia de quadril para rastreamento de DDQ\nUltrassom transfontanela (USTF)'},
+    {key:'notas',tipo:'notas'},
+    {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P59.9',ph:'ex.: P59.9'}
+  ];
+}
+
 /* ======================= DOCUMENTOS ======================= */
 const DOCS = [
   /* ---------- receitas ---------- */
@@ -590,7 +618,7 @@ const DOCS = [
     id:'rx_ferro', grupo:'Receitas', tpl:'rec',
     label:'Receita — Sulfato Ferroso gotas', nota:'Suplementação profilática de ferro',
     campos:[
-      {key:'poso',tipo:'text',label:'Posologia',padrao:'1 gota/kg/dia (máx. 15 mg de Fe elementar/dia)',ph:'1 gota/kg/dia'},
+      {key:'peso',tipo:'number',label:'Peso atual (kg) — calcula as gotas',sufixo:'kg'},
       {key:'quando',tipo:'text',label:'Início',padrao:'Iniciar aos 3 meses de vida (em RN a termo e peso > 2500g).'}
     ],
     body(v){
@@ -599,7 +627,7 @@ const DOCS = [
           n: 1,
           nome: 'Sulfato Ferroso gotas (25 mg/mL de Fe elementar - 1,25 mg/gota)',
           qtd: '01 frasco',
-          pos: 'Administrar por via oral, uma vez ao dia: ' + esc(v.poso || '1 gota/kg/dia') + '.',
+          pos: ferroPos(v),
           obs: v.quando || 'Iniciar aos 3 meses de vida e manter até os 2 anos de idade.'
         }
       ]);
@@ -620,13 +648,19 @@ const DOCS = [
 
   /* ---------- exames ---------- */
   {
-    id:'req', grupo:'Exames', tpl:'req',
+    id:'req', grupo:'Exames', tpl:'req', pedido:1,
     label:'Requisição de exames — HUB', nota:'Modelo oficial do HUB (papelada-HUB) — USG quadril, USTF, bilirrubinas e outros',
-    campos:[
-      {key:'itens',tipo:'checkgroup',label:'Exames solicitados',opcoes:EXAMES_ROTINA},
-      {key:'cid',tipo:'text',label:'CID (obrigatório)',padrao:'P59.9',ph:'ex.: P59.9'},
-      {key:'obs',tipo:'textarea',label:'Outros exames / Indicação clínica (um por linha)',ph:'Ultrassonografia de quadril para rastreamento de DDQ\nUltrassom transfontanela (USTF)'}
-    ]
+    campos:reqCampos()
+  },
+  {
+    id:'req2', grupo:'Exames', tpl:'req', pedido:2,
+    label:'Requisição de exames — 2º pedido', nota:'Pedido separado (ex.: exames de imagem pedidos à parte)',
+    campos:reqCampos()
+  },
+  {
+    id:'req3', grupo:'Exames', tpl:'req', pedido:3,
+    label:'Requisição de exames — 3º pedido', nota:'Terceiro pedido separado, se necessário',
+    campos:reqCampos()
   },
   {
     id:'urg', grupo:'Exames', tpl:'lab',
@@ -911,14 +945,13 @@ function tplRec(d, v){
 }
 
 function tplReq(d, v){
-  const itens = (v.auto||[]).slice();
-  (v.itens||[]).forEach(x => { if(itens.indexOf(x) < 0) itens.push(x); });
-  if(v.obs) v.obs.split('\n').map(s=>s.trim()).filter(Boolean).forEach(s=>{ if(itens.indexOf(s) < 0) itens.push(s); });
-  const lista = itens.length ? '<ol>' + itens.map(i => '<li>' + esc(i) + '</li>').join('') + '</ol>' : '';
+  const itens = reqItens(v);
+  const notas = v.notas || {};
+  const lista = itens.length ? '<ol>' + itens.map(i => '<li>' + esc(i) + (notas[i] ? '<div class="nota-sub">' + esc(notas[i]) + '</div>' : '') + '</li>').join('') + '</ol>' : '';
   return '<div class="t-req">'
     + '<div class="hd"><img src="' + LOGO_UE + '" alt=""><div class="mec">Ministério da<br><b>Educação</b></div>'
       + '<b>HOSPITAL UNIVERSITÁRIO DE BRASÍLIA</b></div>'
-    + '<div class="band">REQUISIÇÃO DE EXAMES</div>'
+    + '<div class="band">REQUISIÇÃO DE EXAMES' + (d.pedido > 1 ? ' — ' + d.pedido + 'º PEDIDO' : '') + '</div>'
     + '<div class="r"><div class="c grow"><b>IDENTIFICAÇÃO (RN):</b> <span class="val">' + esc(state.nome) + '</span></div>'
       + '<div class="c" style="width:40mm"><b>DN:</b> <span class="val">' + esc(br(state.dn)) + '</span></div>'
       + '<div class="c" style="width:46mm"><b>N.º DO PRONTUÁRIO:</b> <span class="val">' + esc(state.reg) + '</span></div></div>'
@@ -1060,6 +1093,8 @@ function buildList(){
         } else if(c.tipo === 'select'){
           html += '<div><label for="' + id + '">' + c.label + '</label><select id="' + id + '"' + dk + '>'
             + c.opcoes.map(o => '<option value="' + esc(o) + '"' + (o === c.padrao ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select></div>';
+        } else if(c.tipo === 'notas'){
+          html += '<div class="notas-box" data-notas="' + d.id + '"></div>';
         } else if(c.tipo === 'checkgroup'){
           html += '<div><label>' + c.label + '</label><div class="tags" style="margin-top:4px">';
           c.opcoes.forEach(op => {
@@ -1105,6 +1140,38 @@ listEl.addEventListener('click', e => {
   const vals = Array.from(listEl.querySelectorAll('button[data-cg="' + did + '"][data-cgk="' + k + '"].on')).map(x => x.dataset.val);
   state.vals[did] = state.vals[did] || {};
   state.vals[did][k] = vals;
+  render();
+});
+
+function reqItens(v){
+  const itens = (v.auto||[]).slice();
+  (v.itens||[]).forEach(x => { if(itens.indexOf(x) < 0) itens.push(x); });
+  if(v.obs) v.obs.split('\n').map(s=>s.trim()).filter(Boolean).forEach(s=>{ if(itens.indexOf(s) < 0) itens.push(s); });
+  return itens;
+}
+
+function paintNotas(){
+  document.querySelectorAll('[data-notas]').forEach(box => {
+    const id = box.dataset.notas;
+    const v = state.vals[id] || {};
+    const itens = reqItens(v);
+    const sig = JSON.stringify(itens);
+    if(box.dataset.sig === sig) return;
+    box.dataset.sig = sig;
+    const notas = v.notas || {};
+    box.innerHTML = itens.length
+      ? itens.map(it => '<div class="nota-item"><span class="nota-nome">' + esc(it) + '</span>'
+          + '<textarea rows="2" data-note="' + esc(id) + '" data-item="' + esc(it) + '" placeholder="Ex.: RN 39S pélvico, nascido sem intercorrências…">' + esc(notas[it] || '') + '</textarea></div>').join('')
+      : '<p class="listnote">Os exames marcados aparecem aqui para receber uma observação.</p>';
+  });
+}
+
+listEl.addEventListener('input', e => {
+  const t = e.target;
+  if(!t.dataset.note) return;
+  const s = state.vals[t.dataset.note] = state.vals[t.dataset.note] || {};
+  s.notas = s.notas || {};
+  s.notas[t.dataset.item] = t.value;
   render();
 });
 
@@ -1164,6 +1231,11 @@ function applyQuick(){
     (P.exames||[]).forEach(e => { if(ex.indexOf(e) < 0) ex.push(e); });
     (P.docs||[]).forEach(d => extras.add(d));
     (P.lab||[]).forEach(l => labItens.add(l));
+    if(P.notas){
+      state.vals.req = state.vals.req || {};
+      state.vals.req.notas = state.vals.req.notas || {};
+      Object.entries(P.notas).forEach(([item, t]) => { if(!state.vals.req.notas[item]) state.vals.req.notas[item] = t; });
+    }
   });
 
   state.vals.req = state.vals.req || {};
@@ -1262,6 +1334,7 @@ $('#jump').addEventListener('click', () => {
 
 /* ======================= MONTAGEM DA FOLHA A4 ======================= */
 function render(){
+  paintNotas();
   const chosen = DOCS.filter(d => state.sel.has(d.id));
   $('#count').textContent = chosen.length === 0 ? 'nenhum' : chosen.length + (chosen.length === 1 ? ' papel' : ' papéis');
   $('#print').disabled = chosen.length === 0;
