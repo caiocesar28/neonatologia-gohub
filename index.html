@@ -1381,7 +1381,7 @@ function salvarRascunho(){
 function carregarRascunho(){
   let d = null;
   try{ d = JSON.parse(localStorage.getItem(KEY_RASCUNHO) || 'null'); }catch(e){ d = null; }
-  if(!d) return;
+  if(!d) return null;
   // A data da alta não é restaurada: sempre começa com a data de hoje.
   ['nome','reg','dn','leito'].forEach(k => {
     if(typeof d[k] === 'string'){ state[k] = d[k]; $('#' + k).value = d[k]; }
@@ -1403,7 +1403,7 @@ function carregarRascunho(){
       }
     });
   });
-  (d.sel || []).forEach(id => setDoc(id, true));
+  return d.sel || [];
 }
 
 $('#limpar').addEventListener('click', () => {
@@ -1487,8 +1487,13 @@ $('#theme').addEventListener('click', () => {
   state.data = iso;
   buildList();
   buildQuick();
-  carregarRascunho();
+  const selSalva = carregarRascunho();
   applyQuick();
+  if(selSalva){
+    // Depois dos botões rápidos, volta exatamente a seleção salva.
+    DOCS.forEach(x => setDoc(x.id, selSalva.indexOf(x.id) >= 0));
+    render();
+  }
 })();
 </script>
 </body>
