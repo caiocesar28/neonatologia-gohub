@@ -1366,8 +1366,10 @@ function atualizarFaltas(){
 
 /* ======================= RASCUNHO (só neste navegador) ======================= */
 const KEY_RASCUNHO = 'alta-neonatologia-rascunho-v1';
+let rascunhoPronto = false; // só grava depois que o rascunho salvo foi carregado
 
 function salvarRascunho(){
+  if(!rascunhoPronto) return;
   try{
     localStorage.setItem(KEY_RASCUNHO, JSON.stringify({
       nome: state.nome, reg: state.reg, dn: state.dn, leito: state.leito,
@@ -1492,8 +1494,9 @@ $('#theme').addEventListener('click', () => {
   if(selSalva){
     // Depois dos botões rápidos, volta exatamente a seleção salva.
     DOCS.forEach(x => setDoc(x.id, selSalva.indexOf(x.id) >= 0));
-    render();
   }
+  rascunhoPronto = true;
+  render();
 })();
 </script>
 </body>
