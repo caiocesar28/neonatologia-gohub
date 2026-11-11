@@ -49,6 +49,12 @@ Projeto inspirado e adaptado a partir do gerador de obstetrícia (`enfermaria.go
 
 ---
 
+## 🙏 Créditos
+
+Todo o código foi baseado no gerador de obstetrícia [`enfermaria.gohub`](https://joaogualda19.github.io/enfermaria.gohub/), de [joaogualda19](https://github.com/joaogualda19).
+
+---
+
 ## 🚀 Como executar
 Como o projeto é uma Single Page Application estática e autossuficiente (HTML + CSS + JS puro com logomarcas vetorizadas/base64 embutidas):
 
