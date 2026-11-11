@@ -326,7 +326,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
   @page{size:A4;margin:0}
   body{background:#fff}
   .app{max-width:none;padding:0}
-  .masthead,.rail,.preview-head,.privacy,.empty,.reminder{display:none !important}
+  .masthead,.rail,.preview-head,.privacy,.empty,.reminder,.credit{display:none !important}
   .layout{display:block}
   #stage{display:block;gap:0}
   .sheet-wrap{display:block;height:auto !important}
@@ -697,7 +697,7 @@ const DOCS = [
     campos:[
       {key:'horas',tipo:'select',label:'Retorno em',opcoes:['24 horas','48 horas','72 horas','96 horas'],padrao:'48 horas'},
       {key:'quando',tipo:'date',label:'Data do retorno'},
-      {key:'motivo',tipo:'text',label:'Motivo da reavaliação',padrao:'Reavaliação de icterícia neonatal, padrão de sucção e ganho ponderal'},
+      {key:'motivo',tipo:'select',label:'Motivo da reavaliação',opcoes:['Icterícia neonatal','Padrão de sucção / aleitamento','Ganho ponderal (peso)'],padrao:'Icterícia neonatal'},
       {key:'cid',tipo:'text',label:'CID',padrao:'P59.9',ph:'ex.: P59.9'}
     ],
     body(v){
@@ -706,7 +706,7 @@ const DOCS = [
       return '<p>O recém-nascido deverá comparecer ao <b>Ambulatório de Consultas (Alcon) do Hospital Universitário de Brasília (HUB)</b> para reavaliação clínica:</p>'
         + '<div class="alert"><p><b>RETORNO EM: ' + esc(horas) + ' — DATA: ' + esc(d) + '</b></p>'
         + '<p><b>Local:</b> Alcon — HUB (Ambulatório de Consultas).</p>'
-        + '<p><b>Motivo:</b> ' + esc(v.motivo || 'Reavaliação de icterícia neonatal e aleitamento materno') + '.</p>'
+        + '<p><b>Motivo:</b> ' + esc(v.motivo || 'Icterícia neonatal') + '.</p>'
         + (v.cid ? '<p><b>CID:</b> ' + esc(v.cid) + '</p>' : '') + '</div>'
         + '<p><b>Orientações aos pais:</b> Trazer a Caderneta da Criança, resultados de exames e relatórios de internação.</p>';
     }
