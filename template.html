@@ -120,6 +120,8 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}
 .credit{text-align:center;font-size:12px;color:var(--ink-2);margin:28px 0 8px}
 .notas-box{display:flex;flex-direction:column;gap:8px}
 .nota-nome{display:block;font-size:12.5px;color:var(--ink);margin-bottom:3px}
+.nota-cidl{font-size:12px;color:var(--ink-2);display:inline-flex;gap:6px;align-items:center;margin:0 0 6px}
+.nota-cid{width:96px}
 .doc-fields label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .inline{display:flex;gap:8px;align-items:center}
 .inline span{font-size:13px;color:var(--ink-3)}
@@ -533,6 +535,16 @@ const EXAMES_ROTINA = [
   'Radiografia de tórax e abdome'
 ];
 
+/* CID sugerido por exame (editável na própria requisição) */
+const EXAMES_CID = {
+  'Ultrassonografia de quadril (rastreamento de displasia)': 'Q65.9',
+  'Ultrassonografia transfontanela (USTF)': 'P91.9',
+  'Bilirrubinas totais e frações': 'P59.9',
+  'Ultrassonografia de rins e vias urinárias': 'Q64.9',
+  'Ecocardiograma com Doppler': 'Q24.9',
+  'Radiografia de tórax e abdome': 'Z01.8'
+};
+
 /* Particularidades do checklist da Neonatologia */
 const PARTIC = {
   ictericia: {
@@ -601,8 +613,7 @@ function reqCampos(){
   return [
     {key:'itens',tipo:'checkgroup',label:'Exames solicitados',opcoes:EXAMES_ROTINA},
     {key:'obs',tipo:'textarea',label:'Exames digitados à mão (um por linha)',ph:'Ultrassonografia de quadril para rastreamento de DDQ\nUltrassom transfontanela (USTF)'},
-    {key:'notas',tipo:'notas'},
-    {key:'cid',tipo:'text',label:'CID',padrao:'P59.9',ph:'ex.: P59.9'}
+    {key:'notas',tipo:'notas'}
   ];
 }
 
@@ -901,8 +912,7 @@ const DOCS = [
         ['HCB (Hospital da Criança de Brasília)','SMHN Q. 101, Área Especial, Asa Norte','(61) 3545-3000'],
         ['HRC (Hospital Regional de Ceilândia)','Área Especial 01, QNM 17, Ceilândia','(61) 3471-9400'],
         ['HRT (Hospital Regional de Taguatinga)','Setor C Área Norte 24, Taguatinga','(61) 3451-9600'],
-        ['HRAN (Hospital Regional da Asa Norte)','SMHN Q. 101, Área Especial, Asa Norte','(61) 3325-5050'],
-        ['HUB (Hospital Universitário de Brasília)','SGAN 605, Av. L2 Norte — internação neonatal','(61) 2028-5000']
+        ['HRAN (Hospital Regional da Asa Norte)','SMHN Q. 101, Área Especial, Asa Norte','(61) 3325-5050']
       ];
       const mk = a => a.map(r => '<tr><td><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>').join('');
       return '<p class="d-sub">UPAs Pediátricas 24h — DF</p>'
@@ -964,7 +974,7 @@ function tplRec(d, v){
 function tplReq(d, v){
   const itens = reqItens(v);
   const notas = v.notas || {};
-  const lista = itens.length ? '<ol>' + itens.map(i => '<li>' + esc(i) + (notas[i] ? '<div class="nota-sub">' + esc(notas[i]) + '</div>' : '') + '</li>').join('') + '</ol>' : '';
+  const lista = itens.length ? '<ol>' + itens.map(i => '<li>' + esc(i) + (cidOf(v, i) ? ' <b>CID ' + esc(cidOf(v, i)) + '</b>' : '') + (notas[i] ? '<div class="nota-sub">' + esc(notas[i]) + '</div>' : '') + '</li>').join('') + '</ol>' : '';
   return '<div class="t-req">'
     + '<div class="hd"><img src="' + LOGO_UE + '" alt=""><div class="mec">Ministério da<br><b>Educação</b></div>'
       + '<b>HOSPITAL UNIVERSITÁRIO DE BRASÍLIA</b></div>'
@@ -975,7 +985,6 @@ function tplReq(d, v){
     + '<div class="r"><div class="c grow"><b>REQUISITANTE:</b></div>'
       + '<div class="c" style="width:40mm"><b>CLÍNICA:</b> <span class="val">' + esc(CLINICA) + '</span></div>'
       + '<div class="c" style="width:26mm"><b>ENF./LEITO:</b> <span class="val">' + esc(state.leito) + '</span></div></div>'
-    + '<div class="r"><div class="c grow"><b>CID:</b> <span class="val">' + esc(v.cid || '') + '</span></div></div>'
     + '<div class="r"><div class="c grow"><b>NATUREZA DO EXAME:</b></div></div>'
     + '<div class="nat">' + lista + '</div>'
     + '<div class="sg"><div><div class="ln"></div>' + esc(br(state.data) || '____/____/______') + ' — DATA</div>'
@@ -1160,6 +1169,11 @@ listEl.addEventListener('click', e => {
   render();
 });
 
+function cidOf(v, item){
+  const c = (v.cids || {})[item];
+  return c !== undefined ? c : (EXAMES_CID[item] || '');
+}
+
 function reqItens(v){
   const itens = (v.itens||[]).slice();
   (v.itens||[]).forEach(x => { if(itens.indexOf(x) < 0) itens.push(x); });
@@ -1178,6 +1192,7 @@ function paintNotas(){
     const notas = v.notas || {};
     box.innerHTML = itens.length
       ? itens.map(it => '<div class="nota-item"><span class="nota-nome">' + esc(it) + '</span>'
+          + '<label class="nota-cidl">CID <input class="nota-cid" data-cidnote="' + esc(id) + '" data-item="' + esc(it) + '" value="' + esc(cidOf(v, it)) + '" placeholder="ex.: Q65.9"></label>'
           + '<textarea rows="2" data-note="' + esc(id) + '" data-item="' + esc(it) + '" placeholder="Ex.: RN 39S pélvico, nascido sem intercorrências…">' + esc(notas[it] || '') + '</textarea></div>').join('')
       : '<p class="listnote">Os exames marcados aparecem aqui para receber uma observação.</p>';
   });
@@ -1185,6 +1200,13 @@ function paintNotas(){
 
 listEl.addEventListener('input', e => {
   const t = e.target;
+  if(t.dataset.cidnote){
+    const c = state.vals[t.dataset.cidnote] = state.vals[t.dataset.cidnote] || {};
+    c.cids = c.cids || {};
+    c.cids[t.dataset.item] = t.value;
+    render();
+    return;
+  }
   if(!t.dataset.note) return;
   const s = state.vals[t.dataset.note] = state.vals[t.dataset.note] || {};
   s.notas = s.notas || {};
@@ -1309,7 +1331,7 @@ document.querySelector('.panel-body').addEventListener('click', e => {
       const idx = state.vals.req.itens.indexOf(item);
       if(on && idx < 0) state.vals.req.itens.push(item);
       else if(!on && idx >= 0) state.vals.req.itens.splice(idx, 1);
-      if(on){ autoCid('urg','P59.9'); autoCid('req','P59.9'); }
+      if(on){ autoCid('urg','P59.9'); }
     } else if(ex === 'quadril'){
       const on = !b.classList.contains('on');
       b.classList.toggle('on', on);
@@ -1319,7 +1341,6 @@ document.querySelector('.panel-body').addEventListener('click', e => {
       const idx = state.vals.req.itens.indexOf(item);
       if(on && idx < 0) state.vals.req.itens.push(item);
       else if(!on && idx >= 0) state.vals.req.itens.splice(idx, 1);
-      if(on) autoCid('req','Q65.9');
     } else if(ex === 'ustf'){
       const on = !b.classList.contains('on');
       b.classList.toggle('on', on);
@@ -1329,7 +1350,6 @@ document.querySelector('.panel-body').addEventListener('click', e => {
       const idx = state.vals.req.itens.indexOf(item);
       if(on && idx < 0) state.vals.req.itens.push(item);
       else if(!on && idx >= 0) state.vals.req.itens.splice(idx, 1);
-      if(on) autoCid('req','P91.9');
     } else if(ex === 'cir'){
       const on = !state.sel.has('parecer');
       setDoc('parecer', on);
