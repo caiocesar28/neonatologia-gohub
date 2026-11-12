@@ -849,24 +849,27 @@ const DOCS = [
   {
     id:'vacinas', grupo:'Orientações aos pais', tpl:'band',
     label:'Calendário vacinal — 1º ano de vida',
-    nota:'Calendário completo do 1º ano segundo o Ministério da Saúde',
+    nota:'Calendário Nacional de Vacinação 2026 — 1º ano de vida',
     titulo:'Calendário Vacinal do 1º Ano de Vida — Ministério da Saúde', semAssinatura:true,
     body(){
       const rows = [
-        ['Ao nascer', 'BCG (dose única) + Hepatite B (1ª dose)'],
-        ['1 mês', 'Hepatite B (2ª dose)'],
-        ['2 meses', 'Pentavalente (DTP+Hib+HepB) 1ª dose · VIP (Polio inativada) 1ª dose · VRH (Rotavírus) 1ª dose · PCV10 (Pneumocócica 10v) 1ª dose'],
-        ['3 meses', 'Pentavalente 2ª dose · VIP 2ª dose · VRH 2ª dose · Meningocócica C 1ª dose'],
-        ['4 meses', 'Pentavalente 3ª dose · VIP 3ª dose · PCV10 2ª dose · Meningocócica C 2ª dose'],
-        ['6 meses', 'Hepatite B (3ª dose) · Influenza (anual, a partir dos 6 meses)'],
-        ['9 meses', 'Febre Amarela (1ª dose) · Meningocócica C (reforço)'],
-        ['12 meses', 'Tríplice viral (SCR) 1ª dose · PCV10 (reforço) · Varicela (SCRV) 1ª dose']
+        ['Ao nascer', 'Hepatite B (1 dose) · BCG (dose única)'],
+        ['2 meses', 'Penta (DTP+Hib+HB) 1ª dose · VIP (pólio inativada) 1ª dose · Rotavírus 1ª dose · Pneumocócica 20-valente 1ª dose'],
+        ['3 meses', 'Meningocócica C 1ª dose'],
+        ['4 meses', 'Penta 2ª dose · VIP 2ª dose · Rotavírus 2ª dose · Pneumocócica 10-valente 2ª dose'],
+        ['5 meses', 'Meningocócica C 2ª dose'],
+        ['6 meses', 'Penta 3ª dose · VIP 3ª dose · Influenza (1ª dose; na primeira vez, 2 doses com 30 dias de intervalo) · Covid-19 1ª dose'],
+        ['6 a 8 meses', 'Febre amarela (1 dose), somente em casos excepcionais ou área de risco'],
+        ['7 meses', 'Covid-19 2ª dose'],
+        ['9 meses', 'Covid-19 3ª dose · Febre amarela (1 dose)'],
+        ['12 meses', 'Pneumocócica 20-valente (reforço) · Meningocócica ACWY (1 dose) · Tríplice viral (SCR) 1ª dose']
       ];
       return '<table class="tbl">'
         + '<thead><tr><th>Idade</th><th>Vacinas</th></tr></thead><tbody>'
         + rows.map(r => '<tr><td><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td></tr>').join('')
         + '</tbody></table>'
-        + '<p class="small" style="margin-top:2mm">Fonte: Calendário Nacional de Vacinação — Ministério da Saúde 2024. Realize as vacinas na UBS mais próxima.</p>';
+        + '<p class="small" style="margin-top:2mm">Rotavírus: 1ª dose entre 1 mês e 15 dias e 11 meses e 29 dias; 2ª dose até 23 meses e 29 dias, com intervalo de 60 dias. Influenza: todo ano a partir dos 6 meses.</p>'
+        + '<p class="small" style="margin-top:1mm">Fonte: Calendário Nacional de Vacinação 2026 — Ministério da Saúde. Realize as vacinas na UBS mais próxima.</p>';
     }
   },
   {
