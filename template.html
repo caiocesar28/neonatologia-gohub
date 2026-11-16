@@ -643,6 +643,21 @@ const DOCS = [
     }
   },
   {
+    id:'rx_formula', grupo:'Receitas', tpl:'rec',
+    label:'Receita — Fórmula infantil de partida', nota:'Aleitamento misto / complementado — 1 medida em 30 ml, de 3/3 horas',
+    body(){
+      return '<p class="d-sub">Uso oral</p>' + rx([
+        {
+          n: 1,
+          nome: 'Fórmula infantil inicial de partida (NAN 1, Nestogeno 1 ou Aptamil 1)',
+          qtd: '',
+          pos: 'Diluir 1 medida da fórmula em 30 ml de água fervida ou filtrada. Oferecer à criança observando sinais de fome e saciedade, preferencialmente após as mamadas no seio, de 3/3 horas.',
+          obs: 'Caso a criança consuma toda a fórmula, aumentar a oferta para: 2 medidas em 60 ml, 3 medidas em 90 ml ou 4 medidas em 120 ml de água fervida ou filtrada. Desprezar o que não for consumido em cada horário.'
+        }
+      ]) + '<p class="small" style="margin-top:2mm">Banco de leite é porta aberta: pode procurá-lo a qualquer momento caso apresente dificuldades e dúvidas em relação à amamentação.</p>';
+    }
+  },
+  {
     id:'rx_ferro', grupo:'Receitas', tpl:'rec',
     label:'Receita — Sulfato Ferroso gotas', nota:'Suplementação profilática de ferro',
     campos:[
@@ -1304,6 +1319,8 @@ document.querySelector('.panel-body').addEventListener('click', e => {
   const b = e.target.closest('button'); if(!b) return;
   if(b.dataset.alim){
     state.alim = b.dataset.alim;
+    // Receita de fórmula: ativa ao escolher misto/complementado; continua desmarcável manualmente
+    setDoc('rx_formula', state.alim === 'formula');
     paintQuick();
     render();
   } else if(b.dataset.ret){
