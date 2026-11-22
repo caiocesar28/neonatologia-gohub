@@ -721,16 +721,24 @@ const DOCS = [
     label:'Retorno no Alcon (48h)', nota:'Reavaliação neonatal precoce (icterícia / aleitamento / peso)',
     titulo:'Reavaliação Neonatal — Ambulatório de Consultas (Alcon / HUB)',
     campos:[
-      {key:'horas',tipo:'select',label:'Retorno em',opcoes:['24 horas','48 horas','72 horas','96 horas'],padrao:'48 horas'},
+      {key:'horas',tipo:'select',label:'Retorno em',opcoes:['24 horas','48 horas','72 horas','96 horas','Personalizado'],padrao:'48 horas'},
+      {key:'horasCustom',tipo:'number',label:'Horas personalizadas (se "Personalizado")',sufixo:'horas'},
       {key:'quando',tipo:'date',label:'Data do retorno'},
+      {key:'periodo',tipo:'select',label:'Período do horário',opcoes:['Não informar','Manhã','Tarde'],padrao:'Não informar'},
+      {key:'hora',tipo:'text',label:'Horário marcado (opcional)',ph:'ex.: 08:30'},
       {key:'motivo',tipo:'select',label:'Motivo da reavaliação',opcoes:['Icterícia neonatal','Padrão de sucção / aleitamento','Ganho ponderal (peso)'],padrao:'Icterícia neonatal'},
       {key:'cid',tipo:'text',label:'CID',padrao:'P59.9',ph:'ex.: P59.9'}
     ],
     body(v){
-      const horas = v.horas || '48 horas';
-      const d = v.quando ? br(v.quando) : (state.data ? br(addDays(state.data, parseInt(horas)||2)) : '___/___/_____');
+      const personalizado = v.horas === 'Personalizado';
+      const nHoras = personalizado ? parseInt(v.horasCustom, 10) : parseInt(v.horas || '48', 10);
+      const horasTxt = personalizado ? (nHoras > 0 ? nHoras + ' horas' : '___ horas') : (v.horas || '48 horas');
+      // Os rótulos são em horas; a data é calculada em dias (24 h = 1 dia)
+      const d = v.quando ? br(v.quando) : (state.data && nHoras > 0 ? br(addDays(state.data, Math.round(nHoras / 24))) : '___/___/_____');
+      const horario = [v.periodo && v.periodo !== 'Não informar' ? v.periodo : '', v.hora ? 'às ' + v.hora : ''].filter(Boolean).join(' · ');
       return '<p>O recém-nascido deverá comparecer ao <b>Ambulatório de Consultas (Alcon) do Hospital Universitário de Brasília (HUB)</b> para reavaliação clínica:</p>'
-        + '<div class="alert"><p><b>RETORNO EM: ' + esc(horas) + ' — DATA: ' + esc(d) + '</b></p>'
+        + '<div class="alert"><p><b>RETORNO EM: ' + esc(horasTxt) + ' — DATA: ' + esc(d) + '</b></p>'
+        + (horario ? '<p><b>Horário:</b> ' + esc(horario) + '</p>' : '')
         + '<p><b>Local:</b> Alcon — HUB (Ambulatório de Consultas).</p>'
         + '<p><b>Motivo:</b> ' + esc(v.motivo || 'Icterícia neonatal') + '.</p>'
         + (v.cid ? '<p><b>CID:</b> ' + esc(v.cid) + '</p>' : '') + '</div>'
